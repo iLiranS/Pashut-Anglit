@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl= env("DIRECT_URL")
+}
+
+enum wordLevel{
+  easy
+  medium
+  hard
+  impossible
+}
+enum userLevel{
+  Rookie
+  Novice
+  Skilled
+  Expert
+  Master
+}
+
+
+model Word{
+  id          Int       @default(autoincrement()) @id
+  word        String    @unique
+  translate   String
+  level       wordLevel
+  rooms       Room[]   @relation("RoomToWord")
+}
+model User{
+  id          String  @id // based on auth id.
+  name        String
+  level       userLevel // cant make default enum?
+  exp         Float     @default(0)
+  words       String[]  @default([])
+  duelScore   Int       @default(0)
+  rooms       Room[]    @relation("RoomToUser")
+}
+model suggestedWord{
+  id          Int       @default(autoincrement()) @id
+  word        String    @unique
+  translate   String
+  wordLevel   wordLevel
+}
+model Room{
+  id          String    @id @default(uuid())
+  users       User[]    @relation("RoomToUser")
+  usersId     String[]
+  user1       String[]  @default([])
+  user2       String[]  @default([])
+  stage       Int       @default(0)
+  words       Word[]    @relation("RoomToWord")
+}

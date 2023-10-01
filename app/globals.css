@@ -2,26 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer components{
+    .inputStyle{
+        @apply  rounded-md p-1 outline-none transition-transform
+        bg-bgDark/10 hover:bg-bgDark/20 focus:bg-bgDark/20
+        dark:bg-bg/10 hover:dark:bg-bg/20 focus:dark:bg-bg/20
+        ;
+    }
+    .inputStyleReverse{
+        @apply  rounded-md p-1 outline-none transition-transform
+        dark:bg-bgDark/10 hover:dark:bg-bgDark/20 focus:dark:bg-bgDark/20
+        bg-bg/10 hover:bg-bg/20 focus:bg-bg/20
+        ;
+    }
 }

@@ -1,34 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### Project on development.
 
-## Getting Started
+## Roadmap
 
-First, run the development server:
+- ~~Main System :word correct and wrong loop~~
+- ~~Dictionary page of words that left and done filter~~
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Duel system - almost done - missing delete on complete and update user score, also friend vs friend
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- User settings - such as password reset , name change and more.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Valid sms sender (couldn't find free option) later to be added.
+- More words at low level - atm ran out of words before leveling up
+- More games
+- More features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run this project, you will need to add the following environment variables to your .env file
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+`DATABASE_URL` - from supabase - used in prisma
 
-## Deploy on Vercel
+`DIRECT_URL` - from supabase - used in prisma
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`NEXT_PUBLIC_BASE_URL` - domain url base - for api routes useage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+`NEXT_PUBLIC_SUPABASE_URL`  - from supabase - used for prisma
+
+`NEXT_PUBLIC_SUPABASE_ANON_KEY=`  - from supabase - used for prisma
+
+`ADMIN_ID`   - from supabase - used for admin validation
+## License
+
+All rights reserved to me (iLiranS) , no copy allowed.
+
