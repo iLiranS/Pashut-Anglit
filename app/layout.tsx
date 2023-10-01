@@ -6,6 +6,8 @@ import {Rubik} from 'next/font/google'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css';
 
+export const dynamic = 'force-dynamic'
+
 const inter = Inter({ subsets: ['latin'] })
 const rubik = Rubik({subsets:['latin']})
 
