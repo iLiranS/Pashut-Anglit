@@ -5,7 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 
 const getDuelData = async(id:number,userId:string) =>{
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/room?id=${id}&userid=${userId}`,{cache:'no-cache'});
+    const response = await fetch(`https://pashutanglit.vercel.app/api/room?id=${id}&userid=${userId}`,{cache:'no-cache'});
     if (!response.ok){
         return null;
     }

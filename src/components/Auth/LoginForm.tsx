@@ -58,7 +58,7 @@ const LoginForm = () => {
           email,
           password,
           options:{
-              emailRedirectTo:`${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback`
+              emailRedirectTo:`https://pashutanglit.vercel.app/auth/callback`
           }
       })
       // if success

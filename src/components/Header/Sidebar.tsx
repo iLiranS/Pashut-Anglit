@@ -62,7 +62,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
             setIsMatchLoading(true);
             if (userStore.id.length<2) {throw new Error('Login to play!')};
             try{
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/room`,{
+                const response = await fetch(`https://pashutanglit.vercel.app/api/room`,{
                     method:'POST',
                     body:JSON.stringify({userId:userStore.id}),
                     headers:{'Content-Type':'application/json'},

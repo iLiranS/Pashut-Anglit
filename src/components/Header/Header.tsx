@@ -24,7 +24,7 @@ const Header = () => {
         const userData = (await supabase.auth.getUser()).data.user;
         if(!userData) throw new Error('no user logged in');
           const id = userData.id;
-          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user?id=${id}`,{cache:'no-store'});
+          const response = await fetch(`https://pashutanglit.vercel.app/api/user?id=${id}`,{cache:'no-store'});
           if (!response.ok) throw new Error('something went wrong with getting user data');
           const user = await response.json() as User;
           userStore.setId(user.id);

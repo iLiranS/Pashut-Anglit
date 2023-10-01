@@ -75,7 +75,7 @@ const MainStudy = () => {
         const levelsQueryParam = levels.join('&levels='); // Join levels with '&levels='
         console.log(levelsQueryParam);
         try{
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/words?levels=${levelsQueryParam}`,{cache:'no-store'});
+            const res = await fetch(`https://pashutanglit.vercel.app/api/words?levels=${levelsQueryParam}`,{cache:'no-store'});
             const data= await res.json() as Word[] | null;
             if (!res.ok){
                 // something went wrong
@@ -139,7 +139,7 @@ const MainStudy = () => {
                 id: user.id,
             });
             // need to tell prisma to update exp.
-            const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/exp?${params.toString()}`,{
+            const result = await fetch(`https://pashutanglit.vercel.app/api/user/exp?${params.toString()}`,{
                 method:'PUT',
                 headers:{'Content-Type':'application/json'},
             })

@@ -60,7 +60,7 @@ const Main:React.FC<{usersInitial:User[],id:string,words:Word[],user:User}> = ({
       roomId : id,
       winnersId
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/room/result`,{
+    const res = await fetch(`https://pashutanglit.vercel.app/api/room/result`,{
       body:JSON.stringify(bodyObj),
       method:'POST',
       headers:{'Content-Type':'application/json'}

@@ -16,7 +16,7 @@ const AdminList = () => {
     const fetchSuggestedWords = useCallback(async()=>{
       if (!moreToFetch || isLoading) return; // no more words to fetch.
       try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/suggested?skip=${currentSkip}`);
+        const response = await fetch(`https://pashutanglit.vercel.app/api/suggested?skip=${currentSkip}`);
         const data = await response.json();
         if (!response.ok) throw new Error(data ?? ' failed fetching suggested words');
         // success shoud get { ,skip:string}
@@ -56,7 +56,7 @@ const AdminList = () => {
       setIsLoading(true);
         // delete word only
         try{
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/suggested?id=${word.id}`,{method:'DELETE'});
+          const res = await fetch(`https://pashutanglit.vercel.app/api/suggested?id=${word.id}`,{method:'DELETE'});
           if (!res.ok){
             throw new Error();
           }
@@ -77,7 +77,7 @@ const AdminList = () => {
       setIsLoading(true);
       // delete word and add to word list
       try{
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/word`,
+        const res = await fetch(`https://pashutanglit.vercel.app/api/word`,
         {
           method:'POST',
           body:JSON.stringify(word),
