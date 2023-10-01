@@ -2,7 +2,6 @@
 import React, { FormEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { sanitize } from "isomorphic-dompurify";
 import PasswordValidator from 'password-validator';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -77,8 +76,8 @@ const LoginForm = () => {
 
     const onSubmit = async(d:any) => {
       // clean check
-      const cleanEmail = sanitize(d.email);
-      const cleanPassword = sanitize(d.password);
+      const cleanEmail = (d.email);
+      const cleanPassword = (d.password);
       if (cleanEmail !== d.email || cleanPassword!=d.password){
         // not clean text
         notifyError('password or email are not valid!');

@@ -103,6 +103,9 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <Link className="hover:underline" href={'/suggest'}>הצע מילה</Link>
                             </AccordionContent>
+                            <AccordionContent onClick={closeSideBarHandler} className="pr-2">
+                                <Link className="hover:underline" href={'/dictionary'}>מילון</Link>
+                            </AccordionContent>
                     </AccordionItem>
 
                     <AccordionItem value="item-2">

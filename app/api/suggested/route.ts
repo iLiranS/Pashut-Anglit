@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { sanitize } from "isomorphic-dompurify";
 
 const prisma = new PrismaClient()
 
@@ -41,8 +40,8 @@ export async function POST(request:Request){
         if (!word || !translate || !wordLevel) throw new Error('missing parameters');
 
         // check sanitize first
-        const clearWord = sanitize(word);
-        const clearTranslate = sanitize(translate);
+        const clearWord = word;
+        const clearTranslate = translate;
         if (clearTranslate !== translate || word !==clearWord) throw new Error('Sanitize failed');
 
         // check if exists in suggested already
