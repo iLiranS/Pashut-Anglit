@@ -55,6 +55,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
             });
         }
 
+        // disabled for now.
         const duelSearchHandler = async() =>{
             return;
             if (isMatchLoading) return;
@@ -62,7 +63,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
             setIsMatchLoading(true);
             if (userStore.id.length<2) {throw new Error('Login to play!')};
             try{
-                const response = await fetch(`https://pashutanglit.vercel.app/api/room`,{
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/room`,{
                     method:'POST',
                     body:JSON.stringify({userId:userStore.id}),
                     headers:{'Content-Type':'application/json'},
@@ -88,24 +89,31 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
         dark:bg-bg dark:text-text`}>
                 <p className="text-sm opacity-75 self-end">שלום, {userStore.name.length>2?userStore.name:'אורח'}</p>
 
-        
-    
-
 
             <div dir="rtl" className="flex flex-col h-full justify-between">
+
                 
                 <Accordion type="single" collapsible className="w-full">
+
                     <AccordionItem value="item-1">
                         <AccordionTrigger>למידה</AccordionTrigger>
+
+                            <AccordionContent onClick={closeSideBarHandler} className="pr-2">
+                                <Link href={'/'} className="hover:underline cursor-pointer">דף הבית</Link>
+                            </AccordionContent>
+
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <Link href={'/study'} className="hover:underline cursor-pointer">לימוד מילים</Link>
                             </AccordionContent>
+
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <Link className="hover:underline" href={'/suggest'}>הצע מילה</Link>
                             </AccordionContent>
+
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <Link className="hover:underline" href={'/dictionary'}>מילון</Link>
                             </AccordionContent>
+
                     </AccordionItem>
 
                     <AccordionItem value="item-2">

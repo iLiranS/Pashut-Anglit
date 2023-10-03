@@ -1,7 +1,3 @@
-
-
-
-
 const SingleAnswer:React.FC<{callBackOnClick:()=>void,translate:string,reveal:boolean,isTrue:boolean}> = ({callBackOnClick,translate,reveal,isTrue}) =>{
     const callBackHandler = () =>{
         if (reveal) return;

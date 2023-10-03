@@ -10,22 +10,22 @@ import { wordLevels } from '@/utils/tsModels';
 
 
 
-const LevelSelector:React.FC<{updateLevel:(e:wordLevels)=>void,initialNull?:boolean}> = ({updateLevel,initialNull=false}) => {
+const LevelSelector:React.FC<{updateLevel:(e:wordLevels)=>void}> = ({updateLevel}) => {
     const valueChangeHandler = (e:any) =>{
         updateLevel(e);
-        }
+    }
 
   return (
-    <Select  onValueChange={valueChangeHandler}>
-        <SelectTrigger className=" w-60">
-            <SelectValue  placeholder={initialNull ? 'כל הרמות' : 'קלה' }/>
+    <Select  defaultValue='easy' onValueChange={valueChangeHandler}>
+        <SelectTrigger className="w-60">
+            <SelectValue  placeholder={'Easy'}/>
         </SelectTrigger>
 
         <SelectContent>
-            <SelectItem value="easy">קלה</SelectItem>
-            <SelectItem value="medium">בינונית</SelectItem>
-            <SelectItem value="hard">קשה</SelectItem>
-            <SelectItem value="impossible">בלתי אפשרית</SelectItem>
+            <SelectItem value="easy">Easy</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="hard">Hard</SelectItem>
+            <SelectItem value="impossible">Impossible</SelectItem>
         </SelectContent>
     </Select>
   )

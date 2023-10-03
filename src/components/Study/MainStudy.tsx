@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { levelsEmoji } from '@/utils/tsModels';
 import SingleAnswer from './SingleAnswer';
+                // TODO: Randomize words so it wont be in order ... 
 
 let didUserLoad = false;
 type gameWord = {word:string,translate:string,level:wordLevel}
@@ -75,7 +76,7 @@ const MainStudy = () => {
         const levelsQueryParam = levels.join('&levels='); // Join levels with '&levels='
         console.log(levelsQueryParam);
         try{
-            const res = await fetch(`https://pashutanglit.vercel.app/api/words?levels=${levelsQueryParam}`,{cache:'no-store'});
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/words?levels=${levelsQueryParam}`,{cache:'no-store'});
             const data= await res.json() as Word[] | null;
             if (!res.ok){
                 // something went wrong
@@ -139,7 +140,7 @@ const MainStudy = () => {
                 id: user.id,
             });
             // need to tell prisma to update exp.
-            const result = await fetch(`https://pashutanglit.vercel.app/api/user/exp?${params.toString()}`,{
+            const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/exp?${params.toString()}`,{
                 method:'PUT',
                 headers:{'Content-Type':'application/json'},
             })
@@ -152,18 +153,18 @@ const MainStudy = () => {
         }
     }
 
-    // if doneWords length >= 75 choose random between the oldest 50 words.
+    // if doneWords length >= 75 choose random between the oldest 50 words and add to words again.
     const retrieveOldWord = async() =>{
         const doneWords = await db.doneWords.toArray();
         if (doneWords.length>=75){
             const rnd = Math.floor(Math.random()*50);
             const wordToRetrieve = doneWords[rnd];
-            await db.doneWords.where('word').equals(wordToRetrieve.word).delete();
             await db.words.add(wordToRetrieve);
         }
     }
 
     const answerHandler = async(isRight:boolean) =>{
+        
         if (!word) return;
         // local update exp and if array given also to DB.
         const result = updateLocalArray(user.level,isRight);
@@ -175,12 +176,21 @@ const MainStudy = () => {
             // in here generate new word.
             const words = await db.words.toArray();
             const wordObj = {word:word.word,translate:word.translate,level:word.level} as any;
-            const nextWord = words[1];
+            // nextWord should be random.
+            const rnd = Math.floor(Math.random()*words.length);
+            const nextWord = words[rnd];
             if (!nextWord) {notifyError('that was the last word'); setIsLastWord(true); return;}
 
             if (isRight){
-                // right, first to doneWords
-                await db.doneWords.add(wordObj);
+                // right, push to doneWords if its not repeated word
+                const doneWords = await db.doneWords.toArray();
+                if (doneWords.map(word => word.word).includes(wordObj.word)){
+                    // repeated word
+                }
+                else{
+                    // word is not done already, first time to doneWords.
+                    await db.doneWords.add(wordObj);
+                }
                 await db.words.where('word').equals(word.word).delete();
 
                 // add one old doneWord to words but every 2 turns so it wont be infinite
@@ -273,7 +283,7 @@ const MainStudy = () => {
             <span className={`text-xs opacity-75 transition-transform ease-in ${reveal ? 'scale-0 delay-1500' : 'scale-100'} absolute bottom-0 right-0 ${word.level==='easy' && 'text-green-300'} ${word.level==='medium' && 'text-yellow-200'} ${word.level==='hard' && 'text-red-500'} ${word.level==='impossible' && 'text-violet-500'}`}>{word.level}{emoji}</span>
             </section>
             
-            <section className='grid grid-cols-2 gap-2 sm:grid-cols-3 w-full'>
+            <section key={word.word} className='grid grid-cols-2 gap-2 sm:grid-cols-3 w-full'>
                 <SingleAnswer reveal={reveal} isTrue={translates[0]===word.translate} callBackOnClick={translates[0]===word.translate ? trueAnswerHandler : wrongAnswerHandler} translate={translates[0]}/>
                 <SingleAnswer reveal={reveal} isTrue={translates[1]===word.translate} callBackOnClick={translates[1]===word.translate ? trueAnswerHandler : wrongAnswerHandler} translate={translates[1]}/>
                 <SingleAnswer reveal={reveal} isTrue={translates[2]===word.translate}  callBackOnClick={translates[2]===word.translate ? trueAnswerHandler : wrongAnswerHandler} translate={translates[2]}/>

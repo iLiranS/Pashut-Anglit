@@ -10,7 +10,7 @@ const LoginOAuth = () => {
         await supabase.auth.signInWithOAuth({
             provider:'github',
             options:{
-                redirectTo:`https://pashutanglit.vercel.app/auth/callback/oauth`,
+                redirectTo:`${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback/oauth`,
             }
         })
     }
@@ -19,7 +19,7 @@ const LoginOAuth = () => {
         await supabase.auth.signInWithOAuth({
             provider: 'google',
             options:{
-                redirectTo:`https://pashutanglit.vercel.app/auth/callback/oauth`
+                redirectTo:`${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback/oauth`
             }
         })
     }

@@ -76,13 +76,13 @@ export const getExpAmount = (level:userLevel,isRight:boolean):number =>{
 
     switch(level){        
         case 'Skilled':
-            isRight ? expUpdate=0.5 : expUpdate=-0.1; 
+            isRight ? expUpdate=0.4 : expUpdate=-0.1; 
         case 'Expert':
-            isRight ? expUpdate=0.5 : expUpdate=-0.2;
+            isRight ? expUpdate=0.3 : expUpdate=-0.1;
         case 'Master':
-            isRight ? expUpdate=0.5 : expUpdate=-0.5;
+            isRight ? expUpdate=0.2 : expUpdate=-0.1;
         default:
-            if (isRight) expUpdate=1
+            if (isRight) expUpdate=0.5
     }
     return expUpdate;
 }

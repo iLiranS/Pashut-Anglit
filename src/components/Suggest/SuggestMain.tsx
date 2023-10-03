@@ -20,7 +20,7 @@ const SuggestMain:React.FC<{role:role,list?:suggestedWord[]}> = ({role,list}) =>
   const apiCheck = async(word:string,translate:string):Promise<boolean> =>{
     
     try{
-      const res = await fetch(`https://pashutanglit.vercel.app/api/suggested`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/suggested`,
       {
         body:JSON.stringify({word,translate,wordLevel}),
         method:'POST',
