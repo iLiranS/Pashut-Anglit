@@ -1,4 +1,4 @@
-import { PrismaClient, wordLevel } from "@prisma/client";
+import { PrismaClient, Word, wordLevel } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient()
@@ -27,4 +27,37 @@ export async function GET(request:Request){
     catch(err:any){
         return NextResponse.json(err.message || 'error',{status:500});
     }
+}
+
+export async function POST(request:Request) {
+    // posting words to words. called from suggested word admin panel only.
+    try{
+
+        const res = await request.json();
+        const words = res as Word[];
+
+        await prisma.word.createMany({
+            data:words
+        })
+        return NextResponse.json('successfully added words');
+    }
+    catch(err:any){
+        return NextResponse.json(err.message ?? 'error posting words',{status:500})
+    }
+
+    // no need to check if exists, happend in suggest already
+    
+}
+
+
+export async function DELETE(request:Request) {
+    // remove all suggested words , after accepting all.
+    try{
+        await prisma.suggestedWord.deleteMany({});
+        return NextResponse.json('success');
+    }
+    catch(err:any){
+        return NextResponse.json(err.message || 'error' ,{status:500})
+    }
+    
 }

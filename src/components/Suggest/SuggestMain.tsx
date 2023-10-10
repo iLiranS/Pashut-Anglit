@@ -83,9 +83,9 @@ const SuggestMain:React.FC<{role:role,list?:suggestedWord[]}> = ({role,list}) =>
 
   
   return (
-    <div className='w-screen  h-[100dvh] flex flex-col gap-2 place-items-center py-8'>
+    <div className='w-screen relative h-[100dvh] grid grid-rows-[max-content,1fr] place-items-center py-2 pb-4'>
 
-    <form  onSubmit={handleSubmit(onSubmit)} className='relative w-60 mx-auto flex flex-col'>
+    <form  onSubmit={handleSubmit(onSubmit)} className='relative w-60 mx-auto flex flex-col h-max'>
 
           <section className='flex flex-col  relative w-60'>
             <label>

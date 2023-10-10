@@ -18,7 +18,8 @@ const config: Config = {
         },
       },
       transitionDelay:{
-        '1500':'1500ms'
+        '1500':'1500ms',
+        '1100':'1100ms'
       },
       colors:{
         bg:'#edede9',

@@ -1,4 +1,4 @@
-import { suggestedWord } from '@prisma/client';
+import {suggestedWord } from '@prisma/client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { toast } from 'react-toastify';
@@ -12,7 +12,6 @@ const AdminList = () => {
     const notifyError= (msg:string)=> toast.error(msg);
     const notifySuccess= (msg:string)=> toast.success(msg);
 
-
     const fetchSuggestedWords = useCallback(async()=>{
       if (!moreToFetch || isLoading) return; // no more words to fetch.
       try{
@@ -20,7 +19,7 @@ const AdminList = () => {
         const data = await response.json();
         if (!response.ok) throw new Error(data ?? ' failed fetching suggested words');
         // success shoud get { ,skip:string}
-        setSuggestedWords(data.words);
+        setSuggestedWords(prev => [...prev, ...data.words]);
         if(data.words.length < 20) setMoreToFetch(false);
         setCurrentSkip(data.skip);
       }
@@ -33,7 +32,7 @@ const AdminList = () => {
         else notifyError(err.message ?? 'failed fetching suggested words');
       }
 
-    },[moreToFetch])
+    },[moreToFetch,currentSkip,isLoading])
 
     useEffect(()=>{
       fetchSuggestedWords();
@@ -95,52 +94,102 @@ const AdminList = () => {
     },[removeSuggestedWord,isLoading])
 
 
+    const removeAllHandler = useCallback(async() =>{
+      if (isLoading) return;
+      setIsLoading(true);
+        // delete all words from suggested
+        try{
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/words`,{method:'DELETE'});
+          if (!res.ok){
+            throw new Error();
+          }
+          // word deleted, remove from state and toast.
+          notifySuccess(`Words Removed from Suggested Successfully!`)
+          setSuggestedWords([]);
+          
+        }
+        catch(err:any){
+          notifyError(err.message ??'error');
+        }
+        setIsLoading(false);
+    },[isLoading])
+
+
+    const approveAllHandler = useCallback(async() =>{
+      if (isLoading) return;
+      setIsLoading(true);
+      const mappedSuggestedToAdd = suggestedWords.map(word => ({word:word.word,translate:word.translate,level:word.wordLevel}));
+      // delete word and add to word list
+      try{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/words`,
+        {
+          method:'POST',
+          body:JSON.stringify(mappedSuggestedToAdd),
+          headers:{'Content-Type':'application/json'}
+        });
+        if (!res.ok) throw new Error();
+        // success
+        notifySuccess(`Words Added to db Successfully`);
+        // remove word from suggested.
+        removeAllHandler();
+      }
+      catch(err:any){
+        notifyError(err.message ?? 'error');
+      }
+    },[removeSuggestedWord,isLoading])
+
+
     const suggestedMapped = useMemo(()=>{
-      const listMap = suggestedWords.map(wordObj => 
-      <tr  key={wordObj.id}>
-        <td className=' p-3 text-left border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.word}</td>
-        <td className=' p-3 text-left border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.translate}</td>
-        <td className=' p-3 text-left border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.wordLevel}</td>
-        <td className='flex gap-1 p-3 text-left border-2 border-bgDark/10 dark:border-bg/10'>
-          <button disabled={isLoading} onClick={()=>{removeSuggestedWord(wordObj)}} className='inputStyle text-red-500 font-semibold cursor-pointer disabled:opacity-60 disabled:text-gray-700 disabled:cursor-not-allowed'>Reject</button>
-          <button disabled={isLoading} onClick={()=>{approveWordHandler(wordObj)}} className='inputStyle text-green-700 font-semibold cursor-pointer disabled:opacity-60 disabled:text-gray-700 disabled:cursor-not-allowed'>Approve</button>
-        </td>
+      const listMap = suggestedWords.map(wordObj =>{
+        return(
+        <tr className='odd:bg-bgDark/10 dark:odd:bg-bg/10' key={wordObj.id}>
+          <td className=' p-2 border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.word}</td>
+          <td className=' p-2 border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.translate}</td>
+          <td className=' p-2 border-2 border-r-0 border-bgDark/10 dark:border-bg/10'>{wordObj.wordLevel}</td>
+          <td className='flex justify-evenly p-2 border-2 border-bgDark/10 dark:border-bg/10'>
+          <button disabled={isLoading} onClick={()=>{removeSuggestedWord(wordObj)}} className='inputStyle text-red-500 font-semibold cursor-pointer disabled:opacity-60 disabled:text-gray-700 disabled:cursor-not-allowed'>No</button>
+          <button disabled={isLoading} onClick={()=>{approveWordHandler(wordObj)}} className='inputStyle text-green-700 font-semibold cursor-pointer disabled:opacity-60 disabled:text-gray-700 disabled:cursor-not-allowed'>Yes</button>
+          </td>
       </tr>
+        )
+      }
       )
       return listMap;
     },[suggestedWords,removeSuggestedWord,approveWordHandler,isLoading])
 
   return (
-    <div className='pt-8 overflow-hidden max-w-[95vw]'>
-      <div className='overflow-x-auto max-w-[500px] relative'>
+    <>
       {suggestedWords.length >0 ?
-      <table className='bg-bgDark/10 dark:bg-bg/10 max-w-full overflow-hidden'>
-
+      <div className='py-2 gap-2 grid grid-rows-[1fr,max-content] relative h-full w-[500px] max-w-[95vw] overflow-y-auto'>
+      <table className='max-w-full'>
         <thead>
         <tr className='inputStyle'>
           <th>Word</th>
           <th>Translate</th>
           <th>Level</th>
-          <th>Approve</th>
+          <th>Action</th>
         </tr>
         </thead>
 
         <tbody>
         {didHydrate && suggestedMapped}
         </tbody>
-
-
       </table>
+
+      <section className='flex items-center justify-center gap-2'>
+        <p onClick={approveAllHandler} className='inputStyle cursor-pointer w-fit mx-auto p-2'>Approve all</p>
+
+        {moreToFetch && isLoading && <section className='animate-spin'><AiOutlineLoading3Quarters/> </section>}
+        {moreToFetch && !isLoading &&  <p className='inputStyle cursor-pointer w-fit mx-auto' onClick={fetchSuggestedWords}>Load more</p>}
+      
+      </section>
+
+      </div>
       :
       <p>No Suggested words.</p>  
     }
-        {moreToFetch &&
-          <div>
-            {isLoading ? <section className='animate-spin'><AiOutlineLoading3Quarters/> </section>: <p onClick={fetchSuggestedWords}>Load more</p>}
-          </div>
-        }
-      </div>
-    </div>
+
+      </>
   )
 }
 

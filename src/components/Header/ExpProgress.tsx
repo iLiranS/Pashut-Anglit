@@ -23,7 +23,7 @@ return (
         :
             <section className='flex relative'>
                 <Progress  className='h-[12px]' value={percentage}/>
-                <p dir='ltr' className='absolute top-1/2 left-2 -translate-y-1/2 text-xs text-text font-medium'>{exp}/{maxExpPerLevel[level]} <span className='text-[10px] font-semibold'>pts</span></p>
+                <p dir='ltr' className='absolute top-1/2 left-2 -translate-y-1/2 text-xs text-text font-medium'>{exp.toFixed(1)}/{maxExpPerLevel[level]} <span className='text-[10px] font-semibold'>pts</span></p>
                 <p className='absolute top-1/2 right-2 -translate-y-1/2 text-xs text-bgDark font-medium'>{userLevels[nextLevelIndex]}</p>
             </section>
         }
