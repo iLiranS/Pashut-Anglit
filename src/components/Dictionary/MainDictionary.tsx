@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import LevelSelector from '../Suggest/LevelSelector'
 import { Word, wordLevel } from '@prisma/client';
 import { Input } from "@/components/ui/input"
@@ -28,8 +28,11 @@ const MainDictionary = () => {
         getWords();
     },[])
 
+    const filteredWordArray = useMemo(()=>{
+        
+    },[words])
 
-    const filteredWords = words.filter(word => level ? word.level === level : true).filter((word)=>searchInput.length>0 ?  word.word.includes(searchInput) || word.translate.includes(searchInput): true);
+    const filteredWords = words.filter(word => level ? word.level === level : true).filter((word)=>searchInput.length>0 ?  word.word.toLowerCase().includes(searchInput.toLowerCase().trim()) || word.translate.includes(searchInput.trim()): true);
 
     const mappedWords = filteredWords.map((wordObj,index) => 
     <li dir='rtl' className='justify-between odd:bg-bgDark/10 dark:odd:bg-bg/10 grid grid-cols-2 text-start text-xl odd:opacity-80' key={index}>
@@ -50,7 +53,7 @@ const MainDictionary = () => {
                     <Input value={searchInput} onChange={updateSearchInputHandler} className='w-full placeholder:text-end' type='text' placeholder='...חיפוש מילה או תרגום'/>
                     {searchInput.length>0 && <FiDelete onClick={()=>{setSearchInput('')}} className='absolute cursor-pointer right-2 opacity-75 top-1/2 -translate-y-1/2 hover:text-red-400'/>}
                 </section>
-                <p className='text-xs opacity-60 text-end px-1'>הערה: אלו רק מילים שענית עליהן בעבר</p>
+                <p className='text-xs opacity-60 text-end px-1'>.הערה: אלו רק מילים שענית עליהן נכון לפחות 3 פעמים</p>
             </div>
 
 
@@ -64,7 +67,7 @@ const MainDictionary = () => {
 
         <section className='h-full relative overflow-hidden'>
             <ul className='flex flex-col  border-[1px] border-bgDark/20 dark:border-bg/20 relative h-max  max-h-full overflow-y-auto'>
-                {mappedWords}
+                {filteredWords.length>0 ? mappedWords : <p className='text-right opacity-75'>לא נמצאו מילים</p>}
             </ul>
         </section>
 

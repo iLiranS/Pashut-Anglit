@@ -6,18 +6,20 @@ import { getLevelsArrayFromLevel, updateLocalArray, updatedUserStats } from '@/u
 import { Word, userLevel, wordLevel } from '@prisma/client';
 import { toast } from 'react-toastify';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { levelsEmoji } from '@/utils/tsModels';
+import { levelsEmoji, localWord } from '@/utils/tsModels';
 import SingleAnswer from './SingleAnswer';
-                // TODO: Randomize words so it wont be in order ... 
+
+
+//TODO: I think lastAnswers aren't stored as array. check it
+// setLastWord is triggered because nextWord doesn't exist check it out. 
 
 let didUserLoad = false;
-type gameWord = {word:string,translate:string,level:wordLevel}
 const MainStudy = () => {
     const notifyError = (msg:string) => toast.error(msg);
     const notifySuccess = (msg:string) => toast.success(msg);
     const user = useUserStore();
     const [reveal,setReveal] = useState(false);
-    const [word,setWord] = useState<gameWord>();
+    const [word,setWord] = useState<localWord>();
     const [startSessionLevel,setStartSessionLevel] = useState<userLevel|null>(null);
     const [translates,setTranslates] = useState<string[]>([]);
     const [isLastWord,setIsLastWord] = useState(false);
@@ -33,7 +35,7 @@ const MainStudy = () => {
         const doneWords = await db.doneWords.toArray();
         const words = await db.words.toArray();
         const totalWords = [...doneWords,...words];
-        if (totalWords.length <6){
+        if (totalWords.length <7){
             notifyError('Not enough words to generate translates');
             return;
         }
@@ -49,7 +51,8 @@ const MainStudy = () => {
         // count the added tranlates, starting from 1 already
         while(alreadyAdded<=6){
             const indexInTotal = Math.floor(Math.random()*totalWords.length);
-            
+            // edge case of two words with same transalte.
+            if (totalWords[indexInTotal].translate === correctTranslate) continue;
             // find empty spot
             const firstEmptyIndex = translatesHolder.findIndex(el => !el);
             if(firstEmptyIndex===-1) break;
@@ -90,6 +93,8 @@ const MainStudy = () => {
             // also check if not exists yet, used for UPDATES from db.
             // this contains new words that are not in Words and not in doneWords
             const finalizeArrayOfNewWords = filteredArrayOfNewWords.filter(word => !words.map(alreadyWord => alreadyWord.word).includes(word.word))
+            // map it to add count field.
+            const mappedLocalWords:localWord[] = finalizeArrayOfNewWords.map(dbWord =>({...dbWord,count:0}));
             
             
             if (finalizeArrayOfNewWords.length <=0){
@@ -97,7 +102,7 @@ const MainStudy = () => {
                 throw new Error('no update found');
             }
             else{
-                await db.words.bulkAdd(finalizeArrayOfNewWords);
+                await db.words.bulkAdd(mappedLocalWords);
                 notifySuccess('fetched ' + finalizeArrayOfNewWords.length + ' new words');
             }
 
@@ -109,7 +114,7 @@ const MainStudy = () => {
     }
 
 
-    // everytime word changes
+    // generate translates options upon word change.
     useEffect(()=>{
         if (word) generateTranslates();
     },[word])
@@ -163,44 +168,100 @@ const MainStudy = () => {
         }
     }
 
+    // used to avoid showing same words by storing last displayed words.
+    const lastAnswersUpdateHandler = ():string[] =>{
+        let lastArr:string[] = [];
+        if (!word) return lastArr;
+
+        // check if exists
+        if (!localStorage.getItem('lastAnswers')){
+            lastArr.push(word.word);
+            localStorage.setItem('lastAnswers',JSON.stringify(lastArr));
+        }
+        // if not, need to check count :
+        else{
+            const lastAnswersJSON = localStorage.getItem('lastAnswers');
+            let lastAnswers: string[] = [];
+            if (lastAnswersJSON){
+                lastAnswers = JSON.parse(lastAnswersJSON);
+                // if <10 just add
+                if (lastAnswers.length < 10){
+                    lastAnswers.push(word.word);
+                }
+                // remove 1st , move everything 1step back and add to last.
+                else{
+                    lastAnswers.shift();
+                    lastAnswers.push(word.word);
+                }
+            }
+            // update localStorage and return updated array.
+            localStorage.setItem('lastAnswers',JSON.stringify(lastAnswers));
+            return lastAnswers;
+        }
+        return lastArr;
+    }
+
+
+    // getting valid word from Words array
+    const getValidNewWord = async(lastWords:string[]) =>{
+        const words = await db.words.toArray();
+        if (words.length <1) {console.log('???');notifyError('that was the last word'); setIsLastWord(true); return;}
+        let rnd = Math.floor(Math.random()*words.length);
+        let nextWord = words[rnd];
+
+        if (lastWords !=null){
+            // check if chosen word not in last array.
+            while(lastWords.includes(nextWord.word)){
+                rnd = Math.floor(Math.random()*words.length);
+                nextWord = words[rnd];
+            }
+        }
+        return nextWord;
+    }
+
     const answerHandler = async(isRight:boolean) =>{
-        
-        if (!word) return;
+        if (!word) return; // weird bug handler.
         // local update exp and if array given also to DB.
         const result = updateLocalArray(user.level,isRight);
         result.dbExpUpdate ? updateUserExp(result.expUpdate,result.dbExpUpdate) : updateUserExp(result.expUpdate);
-
-
         // respoinsible on local db update as well as for edge case of last word available.
         setTimeout(async() => {
             // in here generate new word.
             const words = await db.words.toArray();
-            const wordObj = {word:word.word,translate:word.translate,level:word.level} as any;
-            // nextWord should be random.
-            const rnd = Math.floor(Math.random()*words.length);
-            const nextWord = words[rnd];
-            if (!nextWord) {notifyError('that was the last word'); setIsLastWord(true); return;}
-
+            const wordObj = {word:word.word,translate:word.translate,level:word.level,count:word.count} as localWord;
+ 
+            // right, push to doneWords if its not repeated word and count of 3.
             if (isRight){
-                // right, push to doneWords if its not repeated word
                 const doneWords = await db.doneWords.toArray();
-                if (doneWords.map(word => word.word).includes(wordObj.word)){
-                    // repeated word
-                }
-                else{
-                    // word is not done already, first time to doneWords.
-                    await db.doneWords.add(wordObj);
-                }
+                // remove from words , might add again if not count < 3.
                 await db.words.where('word').equals(word.word).delete();
-
-                // add one old doneWord to words but every 2 turns so it wont be infinite
-                if (words.length%2===0) retrieveOldWord();
+                // check if repeated.
+                if (!doneWords.map(word => word.word).includes(wordObj.word)){
+                    // word is not repeated word, check count
+                    if(word.count >=2){
+                        // add one doneWords to Words every 5 words added to doneWords. 
+                        if (words.length%5===0) retrieveOldWord(); 
+                        // add to doneWords
+                        await db.doneWords.add(wordObj);
+                    }
+                    else{
+                        // add again with updated count
+                        wordObj.count++;
+                        await db.words.add(wordObj);
+                    }
+                
             }
+        }
+            // wrong answer
             else{
-                // wrong, first to last
+                // first to last
                 await db.words.where('word').equals(word.word).delete();
                 await db.words.add(wordObj as any);
             }
+
+            // returns array of 5 last words.
+            const lastWords = lastAnswersUpdateHandler();
+            const nextWord = await getValidNewWord(lastWords);
             setWordToFirstInDB(nextWord);
             setReveal(false);
         }, 2000);

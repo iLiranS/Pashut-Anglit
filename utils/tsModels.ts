@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User, Word } from "@prisma/client";
 
 export interface RoomTS {
     id: number;
@@ -20,4 +20,8 @@ export interface RoomTS {
     medium:128528, //😐
     hard:128534, //😖
     impossible:128520 //😈 
+  }
+
+  export type localWord = Word & {
+    count: number
   }

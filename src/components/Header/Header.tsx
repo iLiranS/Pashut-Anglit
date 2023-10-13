@@ -61,7 +61,7 @@ const Header = () => {
 
     if (!isHydrated) return null
   return (
-    <header className={`absolute top-0 w-full overflow-hidden z-30`}>
+    <header className={`absolute top-0 w-min overflow-hidden z-30`}>
       <div onClick={toggleNav} className={`${isOpen ? 'translate-x-56' : 'translate-x-0'} py-4 px-4  transition-transform ease-in cursor-pointer menuIcon w-fit`}>
       <MenuIcon  isOpen={isOpen}/>
       </div>

@@ -130,13 +130,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                     <AccordionItem value="item-3">
                         <AccordionTrigger>חשבון</AccordionTrigger>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                איפוס סיסמה
-                            </AccordionContent>
-                            <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                שינוי שם
-                            </AccordionContent>
-                            <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                
+                                <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-not-allowed'} opacity-50`}>הגדרות חשבון </p>                                
                             </AccordionContent>
                     </AccordionItem>
 
