@@ -7,11 +7,14 @@ import useUserStore from "@/store/useUserStore";
 import ExpProgress from "./ExpProgress";
 import { toast } from "react-toastify";
 import {  useRouter } from "next/navigation";
+import { db } from "@/utils/db";
+import { AiOutlineWarning } from "react-icons/ai";
 let listener = false;
 
 const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =({isOpen=true,logOut,closeSideBar})=> {
     const loadingToast = () => toast("Searching for a match...", { autoClose: false,closeButton:false,toastId:'matchLoading'});
     const notifyError= (msg:string) => toast.error(msg);
+    const notifySuccess = (msg:string) => toast.success(msg);
     const router = useRouter();
     const themeStore =  useThemeStore();
     const userStore = useUserStore();
@@ -81,6 +84,18 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
             }
 
 
+            const resetProgressHandler = () =>{
+                const answer = confirm('אישור פעולה זו תמחק את נתוני ההתקדמות שלך, האם להמשיך?');
+                if (answer){
+                    localStorage.removeItem('currentStreak');
+                    localStorage.removeItem('lastAnswers');
+                    db.words.clear();
+                    db.doneWords.clear();
+                    notifySuccess('נתוני ההתקדמות נמחקו');
+                }
+            }
+
+
 
     return ( 
         <div ref={navRef} className={`fixed top-0 left-0 h-[100dvh] w-56  transition-transform duration-200  px-2 py-4
@@ -131,6 +146,9 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                         <AccordionTrigger>חשבון</AccordionTrigger>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-not-allowed'} opacity-50`}>הגדרות חשבון </p>                                
+                            </AccordionContent>
+                            <AccordionContent onClick={resetProgressHandler} className="pr-2">
+                                <li className="cursor-pointer flex items-center gap-1"><AiOutlineWarning className='text-red-600'/><p>איפוס התקדמות ומילון</p></li>                                
                             </AccordionContent>
                     </AccordionItem>
 

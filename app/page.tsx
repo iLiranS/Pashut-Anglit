@@ -4,15 +4,22 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { PrismaClient } from "@prisma/client"
 import Link from "next/link"
 
 
-export default function Home() {
- 
+const getWordsCount =async () => {
+  const prisma = new PrismaClient()
+  const count = await prisma.word.count();
+  return count || undefined;
+}
+
+export default async function Home() {
+const wordCount = await getWordsCount();
 
   return (
 
-<div className='relative py-4 grid place-items-center gap-4 w-[100vw]'>
+<div className='relative py-6 grid place-items-center gap-4 w-[100vw]'>
 
 <Accordion type="single" collapsible className="w-[500px] max-w-[95vw]">
 
@@ -119,7 +126,7 @@ export default function Home() {
     </Accordion>
 
     <section className="flex flex-col text-center">
-    <p>Currently there are over <span className='text-violet-400'>120</span> words.</p>
+    <p>Currently there are <span className='text-violet-400'>{wordCount || '...'}</span> words.</p>
     <p className='opacity-75 text-sm text-center'>הערה: נתוני המילים שנלמדו לא מאוחסנים בענן לכן תלויים במכשיר</p>
     <p className='opacity-75 text-sm text-center'>לכן מומלץ להשתמש באותו המכשיר למשך הלמידה עד שתהיה אפשרות לשיתוף</p>
     <Link className="text-orange-400 hover:underline text-sm" href={'/study'}>לחץ כדי להתחיל ללמוד</Link>

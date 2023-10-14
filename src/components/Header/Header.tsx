@@ -65,7 +65,7 @@ const Header = () => {
       <div onClick={toggleNav} className={`${isOpen ? 'translate-x-56' : 'translate-x-0'} py-4 px-4  transition-transform ease-in cursor-pointer menuIcon w-fit`}>
       <MenuIcon  isOpen={isOpen}/>
       </div>
-      {!userStore.id && !isUserLoading && <Link className='absolute right-2 top-2 inputStyle' href={'/auth/login'}>התחבר</Link>}
+      {!userStore.id && !isUserLoading && <Link className='fixed right-2 top-2 inputStyle' href={'/auth/login'}>התחבר</Link>}
       <Sidebar closeSideBar={closeSideBar} logOut={logoutHandler} isOpen={isOpen}/>
     </header>
   )
