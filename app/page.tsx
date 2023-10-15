@@ -4,18 +4,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { PrismaClient } from "@prisma/client"
+import WordCount from "@/src/components/Home/WordCount"
 import Link from "next/link"
+import { Suspense } from "react"
 
 
-const getWordsCount =async () => {
-  const prisma = new PrismaClient()
-  const count = await prisma.word.count();
-  return count || undefined;
-}
 
-export default async function Home() {
-const wordCount = await getWordsCount();
+
+export default  function Home() {
 
   return (
 
@@ -126,7 +122,9 @@ const wordCount = await getWordsCount();
     </Accordion>
 
     <section className="flex flex-col text-center">
-    <p>Currently there are <span className='text-violet-400'>{wordCount || '...'}</span> words.</p>
+      <Suspense fallback={<p>Currently there are <span className='text-violet-400 animate-pulse'>._.</span> words.</p>}>
+        <WordCount/>
+      </Suspense>
     <p className='opacity-75 text-sm text-center'>הערה: נתוני המילים שנלמדו לא מאוחסנים בענן לכן תלויים במכשיר</p>
     <p className='opacity-75 text-sm text-center'>לכן מומלץ להשתמש באותו המכשיר למשך הלמידה עד שתהיה אפשרות לשיתוף</p>
     <Link className="text-orange-400 hover:underline text-sm" href={'/study'}>לחץ כדי להתחיל ללמוד</Link>
