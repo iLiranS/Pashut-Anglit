@@ -60,11 +60,11 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
 
         // disabled for now.
         const duelSearchHandler = async() =>{
-            return;
             if (isMatchLoading) return;
-            loadingToast();
             setIsMatchLoading(true);
             if (userStore.id.length<2) {throw new Error('Login to play!')};
+            loadingToast();
+
             try{
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/room`,{
                     method:'POST',
@@ -134,14 +134,15 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                     <AccordionItem value="item-2">
                         <AccordionTrigger>משחקים</AccordionTrigger>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-not-allowed'} opacity-50`} onClick={duelSearchHandler}>דו קרב-coming soon</p>
+                                <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-pointer'}`} onClick={duelSearchHandler}>דו קרב</p>
                             </AccordionContent>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <p className=" opacity-50 cursor-not-allowed">coming soon</p>
                             </AccordionContent>
 
                     </AccordionItem>
-
+                    
+                    {userStore.id.length>2 &&
                     <AccordionItem value="item-3">
                         <AccordionTrigger>חשבון</AccordionTrigger>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
@@ -151,6 +152,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                                 <li className="cursor-pointer flex items-center gap-1"><AiOutlineWarning className='text-red-600'/><p>איפוס התקדמות ומילון</p></li>                                
                             </AccordionContent>
                     </AccordionItem>
+                    }
 
                 </Accordion>
 

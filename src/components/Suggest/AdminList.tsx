@@ -143,14 +143,14 @@ const AdminList = () => {
       const listMap = suggestedWords.map(wordObj =>{
         return(
         <tr className='odd:bg-bgDark/10 dark:odd:bg-bg/10' key={wordObj.id}>
-          <td className=' p-2 border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.word}</td>
-          <td className=' p-2 border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.translate}</td>
-          <td className=' p-2 border-2 border-r-0 border-bgDark/10 dark:border-bg/10'>{wordObj.wordLevel}</td>
-          <td className='flex justify-evenly p-2 border-2 border-bgDark/10 dark:border-bg/10'>
+          <td className='p-2 border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.word}</td>
+          <td className='p-2 border-2 border-bgDark/10 dark:border-bg/10'>{wordObj.translate}</td>
+          <td className='p-2 border-2 border-r-0 border-bgDark/10 dark:border-bg/10'>{wordObj.wordLevel}</td>
+          <td className=' flex justify-evenly p-2 border-2 border-bgDark/10 dark:border-bg/10'>
           <button disabled={isLoading} onClick={()=>{removeSuggestedWord(wordObj)}} className='inputStyle text-red-500 font-semibold cursor-pointer disabled:opacity-60 disabled:text-gray-700 disabled:cursor-not-allowed'>No</button>
           <button disabled={isLoading} onClick={()=>{approveWordHandler(wordObj)}} className='inputStyle text-green-700 font-semibold cursor-pointer disabled:opacity-60 disabled:text-gray-700 disabled:cursor-not-allowed'>Yes</button>
           </td>
-      </tr>
+        </tr>
         )
       }
       )
@@ -160,18 +160,18 @@ const AdminList = () => {
   return (
     <>
       {suggestedWords.length >0 ?
-      <div className='py-2 gap-2 grid grid-rows-[1fr,max-content] relative h-full w-[500px] max-w-[95vw] overflow-y-auto'>
+      <div className='py-2 gap-2 grid grid-rows-[1fr,max-content] relative max-h-full w-[500px] max-w-[95vw] overflow-y-auto self-start'>
       <table className='max-w-full'>
         <thead>
-        <tr className='inputStyle'>
-          <th>Word</th>
-          <th>Translate</th>
-          <th>Level</th>
-          <th>Action</th>
+        <tr>
+          <th className='text-start pl-2'>Word</th>
+          <th className='text-start pl-2'>Translate</th>
+          <th className='text-start pl-2'>Level</th>
+          <th className='text-center'>Action</th>
         </tr>
         </thead>
 
-        <tbody>
+        <tbody className=''>
         {didHydrate && suggestedMapped}
         </tbody>
       </table>

@@ -339,9 +339,9 @@ const MainStudy = () => {
     return (
         <div className='flex flex-col w-80 max-w-[100vw] mx-auto h-fit top-8  gap-8 relative'>
 
-            <section className='text-center border-b-2 border-b-bgDark/10 dark:border-b-bg/10 pb-2 relative'>
+            <section className='text-center border-b-2 border-b-bgDark/10 dark:border-b-bg/10 pb-1 relative flex flex-col'>
             <p className={`font-semibold transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'}`}>{word.word}  </p>
-            <span className={`text-xs opacity-75 transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'} absolute bottom-0 right-0 ${word.level==='easy' && 'text-green-300'} ${word.level==='medium' && 'text-yellow-200'} ${word.level==='hard' && 'text-red-500'} ${word.level==='impossible' && 'text-violet-500'}`}>{word.level}{emoji}</span>
+            <p className={`text-xs w-fit self-end bg-bgDark/80 dark:bg-bg/20 rounded-md px-1 transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'} ${word.level==='easy' && 'text-green-300'} ${word.level==='medium' && 'text-yellow-300'} ${word.level==='hard' && 'text-red-300'} ${word.level==='impossible' && 'text-violet-300'}`}>{word.level}{emoji}</p>
             </section>
             
             <section key={word.word} className='grid grid-cols-2 gap-2 sm:grid-cols-3 w-full'>

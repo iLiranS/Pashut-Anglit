@@ -1,4 +1,4 @@
-import { PrismaClient, wordLevel } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient()
@@ -43,14 +43,7 @@ export async function POST(request:Request){
                     id:{in:randomIndexes}
                 }
             });
-            //order by level
-            // generatedWords.sort()
-            const levelOrder:wordLevel[] = ["easy", "medium", "hard", "impossible"];
-            const sortedWords = generatedWords.sort((a,b)=>{
-                const levelA = levelOrder.indexOf(a.level);
-                const levelB = levelOrder.indexOf(b.level);
-                return levelA - levelB
-            })
+
             
             // push into new room
             const newRoom = await prisma.room.create({
@@ -60,7 +53,7 @@ export async function POST(request:Request){
                     },
                     usersId:[userId],
                     words:{
-                        connect:sortedWords
+                        connect:generatedWords
                     }
                 }
             })
@@ -123,5 +116,75 @@ export async function GET(request:Request) {
     }
     catch(err:any){
         return NextResponse.json(err.message || 'error',{status:401});
+    }
+}
+
+export async function DELETE(request:Request){
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    try{
+
+        if (!id) throw new Error('missing game id');
+        await prisma.room.delete({
+        where:{
+            id
+        }
+    })
+    const winners = searchParams.getAll('winners'); // Get all values for the 'winners' parameter
+    console.log('room has been deleted with id of ' + id , 'total of'+winners.length +' winners');
+    const scoreToAdd = winners.length > 1 ? 1 : 3; // 1 point for draw, 3 for a win.
+
+    // for each user in winner id array
+    for (const winnerId of winners){
+        // find user first to get current score.
+        const winnerUser = await prisma.user.findFirst({
+            where:{
+                id:winnerId
+            }
+        });
+        if (!winnerUser) throw new Error(`couldn't find user`);
+        // get current score.
+        const currentScore = winnerUser.duelScore;
+        // update new score
+        await prisma.user.update({
+            where:{
+                id:winnerId
+            },
+            data:{
+                duelScore:currentScore+scoreToAdd
+            }
+        })
+    }
+    return NextResponse.json('successfully ended match');
+    }
+    catch(err:any){
+        return NextResponse.json(err.message || 'failed finalizing game',{status:500});
+    }
+}
+
+
+
+export async function PUT(request:Request){
+    console.log('update stage route called');
+
+    try{
+
+        const res = await request.json();
+        const id:string = res.id;
+    console.log('update stage called with id of ' + id);
+    if (!id) return NextResponse.json('failed getting id',{status:404});
+    await prisma.room.update({
+        where:{
+            id
+        },
+        data:{
+            stage:1
+        }
+    })
+    return NextResponse.json(true);
+    }
+    catch(err:any){
+        return NextResponse.json('something went wrong',{status:500});
     }
 }

@@ -64,7 +64,7 @@ const SuggestMain:React.FC<{role:role,list?:suggestedWord[]}> = ({role,list}) =>
       return;
     }
     // api check
-    const result = await apiCheck(word,translate);
+    const result = await apiCheck(word.toLowerCase(),translate);
     if (result){
       // success
       notifySuccess('word suggested successfully!');

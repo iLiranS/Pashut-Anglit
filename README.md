@@ -2,18 +2,7 @@
 
 ## Roadmap
 
-- ~~Main System :word correct and wrong loop~~
-- ~~Dictionary page of words that left and done filter~~
-
-- Duel system - almost done - missing delete on complete and update user score, also friend vs friend
-
-- User settings - such as password reset , name change and more.
-
-- Valid sms sender (couldn't find free option) later to be added.
-- More words at low level - atm ran out of words before leveling up
-- More games
-- More features
-
+-To see roadmap and updates visit the site at https://pashutanglit.vercel.app/
 
 
 ## Environment Variables

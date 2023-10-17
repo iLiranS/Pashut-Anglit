@@ -25,7 +25,7 @@ export default  function Home() {
           <ul className=' list-disc list-inside  gap-1 flex flex-col'>
             <h3 className='text-violet-500'>Duel System</h3>
             <ul className='pl-2 list-disc list-inside'>
-              <li className='flex items-center gap-2'> <p className='text-orange-400 text-xs w-max'>on hold</p>  Fully Functional basic 1v1 duel words game.</li>
+              <li className='flex items-center gap-2'> <p className='text-green-400 text-xs w-max'>beta</p>  Fully Functional basic 1v1 duel words game.</li>
             </ul>
             <h3 className='text-violet-500'>Landing Page</h3>
             <ul className='pl-2 list-disc list-inside'>
@@ -50,9 +50,38 @@ export default  function Home() {
         </AccordionContent>
       </AccordionItem>
 
-
       <AccordionItem  value="item-1">
-        <AccordionTrigger><p>Update 1.0.3 <span className='text-sm  text-violet-500'>(current)</span> <span className='text-[0.65em] opacity-75'>13/3/2023</span></p></AccordionTrigger>
+        <AccordionTrigger><p>Update 1.0.4 <span className='text-sm  text-violet-500'>(current)</span> <span className='text-[0.65em] opacity-75'>17/10/2023</span></p></AccordionTrigger>
+        <AccordionContent>
+          <ul className=' list-disc list-inside gap-1 flex flex-col'>
+            <h3 className='text-violet-500'>Duel Game</h3>
+            <ul className='pl-2 list-disc list-inside'>
+              <li>Duel game first version is out</li>
+              <li>You can enter a match against a random person to compete in a quiz game with words and translates.</li>
+              <li>there mightt be alot of bugs 🐞 which I will work to solve later on.</li>
+              <li>In addition, each user has duel score which depends on match results.</li>
+            </ul>
+
+            <h3 className='text-violet-500'>Main Study</h3>
+            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
+              <li>made the level color visibility, it was hard to see in light mode.</li>
+            </ul>
+
+            
+            <h3 className='text-violet-500'>Suggest</h3>
+            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
+              <li>admin panel approve list improvement ui</li>
+            </ul>
+
+          
+          </ul>
+        </AccordionContent>
+      </AccordionItem>
+
+
+
+      <AccordionItem  value="item-2">
+        <AccordionTrigger><p>Update 1.0.3  <span className='text-[0.65em] opacity-75'>13/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>
             <h3 className='text-violet-500'>Dictionary</h3>
@@ -75,8 +104,8 @@ export default  function Home() {
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem value="item-2">
-        <AccordionTrigger ><p>Update 1.0.2 <span className='text-[0.65em] opacity-75'>10/3/2023</span></p></AccordionTrigger>
+      <AccordionItem value="item-3">
+        <AccordionTrigger ><p>Update 1.0.2 <span className='text-[0.65em] opacity-75'>10/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>
             <h3 className='text-violet-500'>Suggest System</h3>
@@ -101,7 +130,7 @@ export default  function Home() {
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem value="item-3">
+      <AccordionItem value="item-4">
         <AccordionTrigger><p> Update 1.0.1 <span className='text-[0.65em] opacity-75'>3/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>
