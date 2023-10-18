@@ -111,7 +111,7 @@ export const updateLocalArray = (level:userLevel,isRight:boolean):{expUpdate:num
     localValid.push(answer);
     
     // check if length of 9 then return true (which will trigger db validation)
-    if (localValid.length >=10){
+    if (localValid.length >=30){
         localStorage.setItem('currentStreak',JSON.stringify([]));
         const expToGive = updateToGive(level,localValid);
         return {expUpdate,dbExpUpdate:expToGive};

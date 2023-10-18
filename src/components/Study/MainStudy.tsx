@@ -151,10 +151,10 @@ const MainStudy = () => {
                 headers:{'Content-Type':'application/json'},
             })
             if (!result.ok){
-                notifyError('failed updating user exp to db');
+                notifyError('failed updating user exp to db, should not see this!');
             }
             else{
-                notifySuccess('updated to db')
+                // success
             }
         }
     }
@@ -343,12 +343,12 @@ const MainStudy = () => {
             <section className='text-center border-b-2 border-b-bgDark/10 dark:border-b-bg/10 pb-1 relative flex flex-col gap-4'>
                 <p className={`font-semibold text-2xl transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'}`}>{word.word}  </p>
                 <div className='flex justify-between'>
-                    <div className='text-base flex items-center gap-1'>{word.count}/3 <WordCountInfo/></div>
+                    <div className={`text-base flex items-center gap-1 transition-all ${reveal ? 'scale-0 delay-1100' : 'scale-100'}`}>{word.count}/3 <WordCountInfo/></div>
                     <p className={`text-base w-fit self-end bg-bgDark/80 dark:bg-bg/20 rounded-md px-1 transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'} ${word.level==='easy' && 'text-green-300'} ${word.level==='medium' && 'text-yellow-300'} ${word.level==='hard' && 'text-red-300'} ${word.level==='impossible' && 'text-violet-300'}`}>{word.level}{emoji}</p>
                 </div>
             </section>
             
-            <section key={word.word} className='grid grid-cols-2 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(80px,max-content))] justify-around w-full'>
+            <section  className='grid grid-cols-2 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(80px,max-content))] justify-around w-full'>
                 <SingleAnswer reveal={reveal} isTrue={translates[0]===word.translate} callBackOnClick={translates[0]===word.translate ? trueAnswerHandler : wrongAnswerHandler} translate={translates[0]}/>
                 <SingleAnswer reveal={reveal} isTrue={translates[1]===word.translate} callBackOnClick={translates[1]===word.translate ? trueAnswerHandler : wrongAnswerHandler} translate={translates[1]}/>
                 <SingleAnswer reveal={reveal} isTrue={translates[2]===word.translate}  callBackOnClick={translates[2]===word.translate ? trueAnswerHandler : wrongAnswerHandler} translate={translates[2]}/>

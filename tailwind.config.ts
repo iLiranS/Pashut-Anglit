@@ -57,14 +57,23 @@ const config: Config = {
         "foldIn":{
           '0%':{scale:'1'},
           '100%':{scale:'0'},
+        },
+        "click":{
+          '0%':{scale:'1'},
+          '60%':{scale:'0.8'},
+          '70%':{scale:'1.1'},
+          '100%':{scale:'1'}
+
         }
       },
       animation:{
         'scaleUp':'scaleUp 0.5s ease',
+        'scaleUpFast':'scaleUp 0.2s ease',
         'scaleUpWord':'scaleUpWord 0.5s ease forwards',
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        'scaleDownWord':'foldIn 0.5s ease forwards'
+        'scaleDownWord':'foldIn 0.5s ease forwards',
+        'click':'click 0.1s ease forwards'
       }
     },
   },
