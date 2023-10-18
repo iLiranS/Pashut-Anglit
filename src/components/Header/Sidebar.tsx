@@ -2,6 +2,11 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 import {FiSun,FiMoon} from 'react-icons/fi'
+import { AiOutlineHome} from 'react-icons/ai'
+import {HiOutlineBookOpen} from 'react-icons/hi'
+import {BsLightbulb} from 'react-icons/bs'
+import {LuSwords} from 'react-icons/lu'
+import {LiaLanguageSolid} from 'react-icons/lia'
 import useThemeStore from '@/store/useThemeStore'
 import useUserStore from "@/store/useUserStore";
 import ExpProgress from "./ExpProgress";
@@ -62,10 +67,10 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
         const duelSearchHandler = async() =>{
             if (isMatchLoading) return;
             setIsMatchLoading(true);
-            if (userStore.id.length<2) {throw new Error('Login to play!')};
-            loadingToast();
-
+            
             try{
+                loadingToast();
+                if (userStore.id.length<2) {throw new Error('התחבר על מנת לשחק')};
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/room`,{
                     method:'POST',
                     body:JSON.stringify({userId:userStore.id}),
@@ -75,6 +80,9 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
             const data = await response.json(); // room id or error message
             if (!response.ok) {updateLoadingToast('Failed entering a match'); throw new Error(data)};
             updateLoadingToast('✅ Redirecting to match');
+            setTimeout(() => {
+                toast.dismiss('matchLoading');
+            }, 1000);
             router.push(`/duel/${data}`)
         }
         catch(err:any){
@@ -102,31 +110,31 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
         ${isOpen ? 'translate-x-0' :'-translate-x-full'} flex flex-col rounded-r-md
         bg-bgDark   text-textDark
         dark:bg-bg dark:text-text`}>
-                <p className="text-sm opacity-75 self-end">שלום, {userStore.name.length>2?userStore.name:'אורח'}</p>
+                <p className="opacity-75 self-end">שלום, {userStore.name.length>2?userStore.name:'אורח'}</p>
 
 
-            <div dir="rtl" className="flex flex-col h-full justify-between">
+            <div dir="rtl" className="flex flex-col h-full justify-between text-lg">
 
                 
                 <Accordion type="single" collapsible className="w-full">
 
                     <AccordionItem value="item-1">
-                        <AccordionTrigger>למידה</AccordionTrigger>
+                        <AccordionTrigger>ראשי</AccordionTrigger>
 
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                <Link href={'/'} className="hover:underline cursor-pointer">דף הבית</Link>
+                                <Link href={'/'} className="hover:underline cursor-pointer flex items-center gap-1"> <AiOutlineHome/>דף הבית</Link>
                             </AccordionContent>
 
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                <Link href={'/study'} className="hover:underline cursor-pointer">לימוד מילים</Link>
+                                <Link href={'/study'} className="hover:underline cursor-pointer flex items-center gap-1"><LiaLanguageSolid/>לימוד מילים</Link>
                             </AccordionContent>
 
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                <Link className="hover:underline" href={'/suggest'}>הצע מילה</Link>
+                                <Link className="hover:underline flex items-center gap-1" href={'/suggest'}><BsLightbulb/>הצע מילה</Link>
                             </AccordionContent>
 
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                <Link className="hover:underline" href={'/dictionary'}>מילון</Link>
+                                <Link className="hover:underline flex items-center gap-1" href={'/dictionary'}><HiOutlineBookOpen/>מילון</Link>
                             </AccordionContent>
 
                     </AccordionItem>
@@ -134,7 +142,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                     <AccordionItem value="item-2">
                         <AccordionTrigger>משחקים</AccordionTrigger>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-pointer'}`} onClick={duelSearchHandler}>דו קרב</p>
+                                <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-pointer'} flex items-center gap-1`} onClick={duelSearchHandler}><LuSwords/>דו קרב</p>
                             </AccordionContent>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <p className=" opacity-50 cursor-not-allowed">coming soon</p>
@@ -149,7 +157,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                                 <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-not-allowed'} opacity-50`}>הגדרות חשבון </p>                                
                             </AccordionContent>
                             <AccordionContent onClick={resetProgressHandler} className="pr-2">
-                                <li className="cursor-pointer flex items-center gap-1"><AiOutlineWarning className='text-red-600'/><p>איפוס התקדמות ומילון</p></li>                                
+                                <li className="cursor-pointer flex items-center gap-1"><AiOutlineWarning className='text-red-600 '/><p className="hover:underline">איפוס התקדמות ומילון</p></li>                                
                             </AccordionContent>
                     </AccordionItem>
                     }

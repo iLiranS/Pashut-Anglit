@@ -7,7 +7,7 @@ import {  levelsEmoji } from '@/utils/tsModels'
 import DuelGameArea from './DuelGameArea'
 import useUserStore from '@/store/useUserStore'
 import TextStartAnimation from './TextStartAnimation'
-import { redirect } from 'next/navigation'
+import { redirect} from 'next/navigation'
 
 let didFinish = false;
 let didUpdateStage = false;
@@ -25,7 +25,6 @@ const Main:React.FC<{usersInitial:User[],id:string,words:Word[],user:User}> = ({
   const supabase = createClientComponentClient();
   const userStore = useUserStore();
   const dotList = useRef<HTMLUListElement>(null);
-  
   const hasWrong = answers.includes(false);
 
 
@@ -82,6 +81,20 @@ useEffect(()=>{
     else if(stage ===19) dotList.current.children[stage].scrollIntoView();
     else dotList.current.children[stage+1].scrollIntoView();
   },[stage])
+
+  // hadnles player leaving before other joined
+  useEffect(()=>{
+    const unloadHandler = async() =>{
+      if (usersInitial.length>1) return;
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/room?id=${id}`,{method:'DELETE'});
+    }
+    window.addEventListener('beforeunload',unloadHandler);
+
+    return()=>{
+      if (winners.length<1 && stage===-1) unloadHandler(); // handles path change
+      window.removeEventListener('beforeunload',unloadHandler) // handles closing tab
+    }
+  },[])
 
   // handles mapping user names 
     const usersMapped = users.map((userObj:any) =>
@@ -257,10 +270,11 @@ useEffect(()=>{
 
   let winnersMapped = '';
   if(winners.length>0) winnersMapped =  winners.length >1 ? 'its a tie ! 😐' : winners[0]===user.id ? 'You win! 😃' : 'You lost! 🥺';
+  if (winners[0]==='none') winnersMapped='You cancled the match! 🙁';
 
   
   return (
-    <div key={stage} className='flex flex-col gap-4'>
+    <div key={stage} className='flex flex-col gap-4 pt-8'>
 
       <div className='flex items-center justify-between gap-8 relative'>
         {usersMapped}

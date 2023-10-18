@@ -15,7 +15,11 @@ const config: Config = {
         padding: "2rem",
         screens: {
           "2xl": "1400px",
+          "xs":"320px"
         },
+      },
+      fontSize:{
+        'md':'0.85em'        
       },
       transitionDelay:{
         '1500':'1500ms',
@@ -39,8 +43,8 @@ const config: Config = {
           '100%':{scale:'1'}
         },
         scaleUpWord:{
-          '0%':{scale:'0'},
-          '100%':{scale:'1'},
+          '0%':{scale:'0',opacity:'0'},
+          '100%':{scale:'1',opacity:'1'},
         },
         "accordion-down": {
           from: { height: '0' },

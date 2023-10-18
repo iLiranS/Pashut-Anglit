@@ -15,34 +15,31 @@ export default  function Home() {
 
   return (
 
-<div className='relative py-6 grid place-items-center gap-4 w-[100vw]'>
+<div className='relative  pt-8 grid place-items-center gap-4'>
+<li dir="rtl" className="flex items-center gap-1 justify-center text-xs"><p className="text-green-400 underline underline-offset-2">חדש</p> <p className="opacity-100">דו קרב עכשיו זמין</p></li>
 
-<Accordion type="single" collapsible className="w-[500px] max-w-[95vw]">
+<Accordion type="single" collapsible className="w-[500px] max-w-[95vw] ">
 
-<AccordionItem value="item-0">
-        <AccordionTrigger><p>To Do<span className='text-[0.65em] opacity-75'></span></p></AccordionTrigger>
+      <AccordionItem  value="item-2">
+        <AccordionTrigger><p>Update 1.0.5 <span className='text-sm  text-violet-500'>(current)</span> <span className='text-[0.65em] opacity-75'>18/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
-          <ul className=' list-disc list-inside  gap-1 flex flex-col'>
-            <h3 className='text-violet-500'>Duel System</h3>
+          <ul className=' list-disc list-inside gap-1 flex flex-col'>
+            <h3 className='text-violet-500'>Duel Game</h3>
             <ul className='pl-2 list-disc list-inside'>
-              <li className='flex items-center gap-2'> <p className='text-green-400 text-xs w-max'>beta</p>  Fully Functional basic 1v1 duel words game.</li>
+              <li>leave detection before starting a match will now delete room instance.</li>
+              <li>some code improvement</li>
             </ul>
-            <h3 className='text-violet-500'>Landing Page</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>A real landing page with content and updates will move to deticated page</li>
+
+            <h3 className='text-violet-500'>Main Study</h3>
+            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
+              <li>there is now an indicator that explains the learning system.</li>
+              <li>friendlier UI and animations - bigger text and answer animation changed.</li>
             </ul>
-            <h3 className='text-violet-500'>UI</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Overall UI update and animations to feel more alive.</li>
-            </ul>
-            <h3 className='text-violet-500'>Data</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li className='flex items-center gap-2'> <p className='text-green-500 text-xs w-max'>passive</p> Add more words</li>
-              <li>Cross platform/device dictionary - might be premium</li>
-            </ul>
-            <h3 className='text-violet-500'>User</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Option to update password / username</li>
+
+            
+            <h3 className='text-violet-500'>SideBar</h3>
+            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
+              <li>bigger text and added icons for each option.</li>
             </ul>
 
           
@@ -50,8 +47,8 @@ export default  function Home() {
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem  value="item-1">
-        <AccordionTrigger><p>Update 1.0.4 <span className='text-sm  text-violet-500'>(current)</span> <span className='text-[0.65em] opacity-75'>17/10/2023</span></p></AccordionTrigger>
+      <AccordionItem  value="item-3">
+        <AccordionTrigger><p>Update 1.0.4  <span className='text-[0.65em] opacity-75'>17/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>
             <h3 className='text-violet-500'>Duel Game</h3>
@@ -80,7 +77,7 @@ export default  function Home() {
 
 
 
-      <AccordionItem  value="item-2">
+      <AccordionItem  value="item-4">
         <AccordionTrigger><p>Update 1.0.3  <span className='text-[0.65em] opacity-75'>13/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>
@@ -104,7 +101,7 @@ export default  function Home() {
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem value="item-3">
+      <AccordionItem value="item-5">
         <AccordionTrigger ><p>Update 1.0.2 <span className='text-[0.65em] opacity-75'>10/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>
@@ -130,7 +127,7 @@ export default  function Home() {
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem value="item-4">
+      <AccordionItem value="item-6">
         <AccordionTrigger><p> Update 1.0.1 <span className='text-[0.65em] opacity-75'>3/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>

@@ -122,16 +122,18 @@ export async function GET(request:Request) {
 export async function DELETE(request:Request){
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
+    console.log('delete room called with id of ' + id);
 
     try{
-
         if (!id) throw new Error('missing game id');
         await prisma.room.delete({
         where:{
             id
         }
     })
+    
     const winners = searchParams.getAll('winners'); // Get all values for the 'winners' parameter
+    if (!winners) { console.log('game has been canceled');return NextResponse.json('game has been canceled');}
     console.log('room has been deleted with id of ' + id , 'total of'+winners.length +' winners');
     const scoreToAdd = winners.length > 1 ? 1 : 3; // 1 point for draw, 3 for a win.
 
