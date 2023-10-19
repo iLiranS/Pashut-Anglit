@@ -60,8 +60,8 @@ const config: Config = {
         },
         "click":{
           '0%':{scale:'1'},
-          '60%':{scale:'0.8'},
-          '70%':{scale:'1.1'},
+          '30%':{scale:'0.8'},
+          '80%':{scale:'1.1'},
           '100%':{scale:'1'}
 
         }
@@ -73,7 +73,7 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         'scaleDownWord':'foldIn 0.5s ease forwards',
-        'click':'click 0.1s ease forwards'
+        'click':'click 0.3s ease forwards'
       }
     },
   },

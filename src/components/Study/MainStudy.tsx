@@ -244,6 +244,7 @@ const MainStudy = () => {
                         if (words.length%5===0) retrieveOldWord(); 
                         // add to doneWords
                         await db.doneWords.add(wordObj);
+                        notifySuccess(`${wordObj.word} has been learned ${String.fromCodePoint(129395)}`);
                     }
                     else{
                         // add again with updated count
@@ -338,13 +339,13 @@ const MainStudy = () => {
     const emojiCode = levelsEmoji[word.level];
     const emoji = String.fromCodePoint(emojiCode);
     return (
-        <div className='flex flex-col w-80 max-w-[100vw] mx-auto h-fit top-8  gap-8 relative px-1'>
+        <div className='flex flex-col w-80 max-w-[100vw] mx-auto h-fit top-8  gap-4 relative px-1'>
 
             <section className='text-center border-b-2 border-b-bgDark/10 dark:border-b-bg/10 pb-1 relative flex flex-col gap-4'>
-                <p className={`font-semibold text-2xl transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'}`}>{word.word}  </p>
+                <p className={`font-semibold text-2xl transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'}`}>{word.word.charAt(0).toUpperCase()+word.word.slice(1)}  </p>
                 <div className='flex justify-between'>
                     <div className={`text-base flex items-center gap-1 transition-all ${reveal ? 'scale-0 delay-1100' : 'scale-100'}`}>{word.count}/3 <WordCountInfo/></div>
-                    <p className={`text-base w-fit self-end bg-bgDark/80 dark:bg-bg/20 rounded-md px-1 transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'} ${word.level==='easy' && 'text-green-300'} ${word.level==='medium' && 'text-yellow-300'} ${word.level==='hard' && 'text-red-300'} ${word.level==='impossible' && 'text-violet-300'}`}>{word.level}{emoji}</p>
+                    <div className={`text-base  bg-bgDark/80 dark:bg-bg/20 rounded-md px-1 transition-transform ease-in ${reveal ? 'scale-0 delay-1100' : 'scale-100'} ${word.level==='easy' && 'text-green-300'} ${word.level==='medium' && 'text-yellow-300'} ${word.level==='hard' && 'text-red-300'} ${word.level==='impossible' && 'text-violet-300'}`}>{word.level}{emoji}</div>
                 </div>
             </section>
             

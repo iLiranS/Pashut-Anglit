@@ -1,23 +1,13 @@
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
-
 import {AiOutlineInfoCircle} from 'react-icons/ai'
-import React from 'react'
+import { toast } from 'react-toastify'
 
 const WordCountInfo = () => {
+    const notify = () => toast("Answer correctly 3 times to learn the word",{toastId:'learnSystemToast',type:'info'})
+
 return (
-    <TooltipProvider>
-        <Tooltip>
-            <TooltipTrigger><AiOutlineInfoCircle className='opacity-50 text-m'/></TooltipTrigger>
-            <TooltipContent>
-                answer 3 times correctly to learn the word.
-            </TooltipContent>
-        </Tooltip>
-    </TooltipProvider>
+    <div className='cursor-pointer' onClick={notify}>
+    <AiOutlineInfoCircle className='opacity-50 text-m'/>
+    </div>
 )
 }
 
