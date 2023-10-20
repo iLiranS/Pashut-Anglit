@@ -20,8 +20,27 @@ export default  function Home() {
 
 <Accordion type="single" collapsible className="w-[500px] max-w-[95vw] ">
 
+<AccordionItem  value="item-1">
+        <AccordionTrigger><p>Update 1.0.6 <span className='text-sm  text-violet-500'>(current)</span> <span className='text-[0.65em] opacity-75'>20/10/2023</span></p></AccordionTrigger>
+        <AccordionContent>
+          <ul className=' list-disc list-inside gap-1 flex flex-col'>
+            <h3 className='text-violet-500'>Snake Game 🐍 </h3>
+            <ul className='pl-2 list-disc list-inside'>
+              <li>Brand new game, A sanke game with a twist.</li>
+              <li>still not 100% done but pretty challenging.</li>
+            </ul>
+          
+            <h3 className='text-violet-500'>Main Study & Duel</h3>
+            <ul className='pl-2 list-disc list-inside'>
+              <li>Smoother animations</li>
+            </ul>
+          
+          </ul>
+        </AccordionContent>
+      </AccordionItem>
+
       <AccordionItem  value="item-2">
-        <AccordionTrigger><p>Update 1.0.5 <span className='text-sm  text-violet-500'>(current)</span> <span className='text-[0.65em] opacity-75'>18/10/2023</span></p></AccordionTrigger>
+        <AccordionTrigger><p>Update 1.0.5  <span className='text-[0.65em] opacity-75'>18/10/2023</span></p></AccordionTrigger>
         <AccordionContent>
           <ul className=' list-disc list-inside gap-1 flex flex-col'>
             <h3 className='text-violet-500'>Duel Game</h3>

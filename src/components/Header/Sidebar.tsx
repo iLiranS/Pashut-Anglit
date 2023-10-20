@@ -7,6 +7,7 @@ import {HiOutlineBookOpen} from 'react-icons/hi'
 import {BsLightbulb} from 'react-icons/bs'
 import {LuSwords} from 'react-icons/lu'
 import {LiaLanguageSolid} from 'react-icons/lia'
+import {MdOutlineGames} from 'react-icons/md'
 import useThemeStore from '@/store/useThemeStore'
 import useUserStore from "@/store/useUserStore";
 import ExpProgress from "./ExpProgress";
@@ -145,7 +146,7 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
                                 <p className={`hover:underline ${isMatchLoading ? 'cursor-not-allowed opacity-70' :'cursor-pointer'} flex items-center gap-1`} onClick={duelSearchHandler}><LuSwords/>דו קרב</p>
                             </AccordionContent>
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
-                                <p className=" opacity-50 cursor-not-allowed">coming soon</p>
+                            <Link className="hover:underline flex items-center gap-1" href={'/snake'}><MdOutlineGames/>סנייק</Link>
                             </AccordionContent>
 
                     </AccordionItem>
