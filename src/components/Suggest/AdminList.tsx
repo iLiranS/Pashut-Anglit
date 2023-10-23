@@ -136,7 +136,7 @@ const AdminList = () => {
       catch(err:any){
         notifyError(err.message ?? 'error');
       }
-    },[removeSuggestedWord,isLoading])
+    },[isLoading,suggestedWords,removeAllHandler])
 
 
     const suggestedMapped = useMemo(()=>{

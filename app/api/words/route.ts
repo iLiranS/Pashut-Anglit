@@ -32,13 +32,15 @@ export async function GET(request:Request){
 export async function POST(request:Request) {
     // posting words to words. called from suggested word admin panel only.
     try{
-
+        
         const res = await request.json();
         const words = res as Word[];
+        console.table(words);
 
-        await prisma.word.createMany({
+        const wordsObj =await prisma.word.createMany({
             data:words
         })
+        if (!wordsObj) throw new Error('something went wrong');
         return NextResponse.json('successfully added words');
     }
     catch(err:any){
