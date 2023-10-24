@@ -289,9 +289,6 @@ const MainSnake = () => {
                     <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
                 </li>
             }
-            <li>
-                <PlayerMovement didLose={didLose}  currentDirection={direction} playerLength={score+1} updateDirection={updateDirectionHandler}/>
-            </li>
 
             {didLose && didWin &&
                 <li className='flex flex-col text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md'>
@@ -299,6 +296,7 @@ const MainSnake = () => {
                     <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
                 </li>
             }
+                <PlayerMovement didLose={didLose}  currentDirection={direction} playerLength={score+1} updateDirection={updateDirectionHandler}/>
         </ul>
         </div>
 

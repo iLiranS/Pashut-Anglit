@@ -7,7 +7,7 @@ type touchPos = {x:number|null,y:number|null};
 const PlayerMovement:React.FC<{updateDirection:(direction:number)=>void,currentDirection:number|null,playerLength:number,didLose:boolean}> = ({didLose,updateDirection,currentDirection,playerLength}) => {
     const [startPos,setStartPos] = useState<touchPos>({x:null,y:null});
     const [endPos,setEndPos] = useState<touchPos>({x:null,y:null});
-    const boardRef = useRef<HTMLDivElement>(null);
+    const boardRef = useRef<HTMLLIElement>(null);
     const isNewDirectionValid =useCallback((newDir:number) =>{
         if (!currentDirection) return true;
         if (playerLength <2) return true;
@@ -116,11 +116,8 @@ const PlayerMovement:React.FC<{updateDirection:(direction:number)=>void,currentD
     },[boardRef,setTouchEndHandler])
 
 
-
 return (
-    <div ref={boardRef} className={`absolute w-full h-full  touch-none ${didLose && '-z-10'}`}>
-
-    </div>
+    <li ref={boardRef} className={`absolute w-full h-full touch-none ${didLose && '-z-10'}`}/>
 )
 }
 
