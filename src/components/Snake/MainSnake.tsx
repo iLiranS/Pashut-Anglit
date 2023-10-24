@@ -3,7 +3,10 @@ import React,{useState,useEffect,useMemo, useCallback} from 'react'
 import PlayerMovement from './PlayerMovement';
 import { db } from '@/utils/db';
 import { localWord } from '@/utils/tsModels';
+import {BiMove} from 'react-icons/bi'
+import {FaRegKeyboard} from 'react-icons/fa'
 import { toast } from 'react-toastify';
+import {AiOutlineArrowUp} from 'react-icons/ai'
 
 
 let nextDirection:number|null = null;
@@ -19,6 +22,7 @@ const MainSnake = () => {
     const [fruitPosCopy,setfruitPosCopy] = useState<number[]|null>(null);
     const [didGameStart,setDidGameStart] = useState(false);
     const [didWin,setDidWin] = useState(false);
+    const [showGridLines,setShowGridLines] = useState(true);
     const [score,setScore] = useState(0);
     const [direction,setDirection] = useState<number|null>(null); // 1 up , 2 right , 3 down , 4 left
     const [didLose,setDidLose] = useState(false);
@@ -39,12 +43,28 @@ const MainSnake = () => {
                 const isFruitInSpot = fruitPos?.toString() === currentSpot.toString() 
                 const isfruitCopyInSpot = fruitPosCopy?.toString()===currentSpot.toString();
                 const isFirst = snake[0][0] === currentSpot[0] && snake[0][1] === currentSpot[1];
-                mappedInside.push(<li className={`grid rounded-sm place-items-center w-full aspect-square ${isFirst && 'bg-black'} ${doesPlayerInSpot && !isFruitInSpot &&!isfruitCopyInSpot && !isFirst && 'bg-green-400'} ${isFruitInSpot && 'bg-orange-500'} ${ isfruitCopyInSpot && 'bg-violet-600'} ${!isFruitInSpot && !isfruitCopyInSpot && !doesPlayerInSpot && 'bg-gray-400'}`} key={counter.toString()}></li>)
+                let rotateArrowDeg =0;
+                switch(nextDirection){
+                    case 2:
+                        rotateArrowDeg = 90;
+                        break;
+                    case 3:
+                        rotateArrowDeg = 180;
+                        break;
+                    case 4:
+                        rotateArrowDeg= -90;
+                        break;
+                }
+                mappedInside.push(<li className={`grid relative rounded-sm place-items-center w-full aspect-square ${isFirst && 'bg-black'} ${doesPlayerInSpot && !isFruitInSpot &&!isfruitCopyInSpot && !isFirst && 'bg-green-400'} ${isFruitInSpot && 'bg-orange-500'} ${ isfruitCopyInSpot && 'bg-violet-600'} ${!isFruitInSpot && !isfruitCopyInSpot && !doesPlayerInSpot && showGridLines && 'bg-gray-400/60'} ${!isFruitInSpot && !isfruitCopyInSpot && !doesPlayerInSpot && !showGridLines && 'bg-transparent'} `} key={counter.toString()}>
+                    {isFirst && <AiOutlineArrowUp 
+                                style={{ transform: `rotate(${rotateArrowDeg}deg)` }}
+                                className={`absolute text-white text-xs opacity-80`}/>}
+                </li>)
                 counter++;
             }
         }
         return mappedInside;
-    },[snake,fruitPos,fruitPosCopy,gridSize])
+    },[snake,fruitPos,fruitPosCopy,gridSize,showGridLines])
 
     const updateGame = () =>{
         if (!didGameStart || didLose || !direction) return;
@@ -224,50 +244,63 @@ const MainSnake = () => {
 
 
   return (
-    <div className=' h-[100dvh] w-screen gap-1 max-w-[500px] mx-auto  relative pt-3 select-none overflow-hidden grid grid-rows[max-content,max-content,1fr] pb-2 px-1'>
+    <div className=' h-[100dvh] w-screen gap-1 max-w-[500px] mx-auto  relative pt-3 select-none overflow-hidden flex flex-col pb-2 px-1'>
 
-        <section className={`flex ${didGameStart ? 'justify-center' : ' justify-evenly'} w-full items-center mx-auto  h-fit`}>
+        <section className={`flex ${didGameStart ? 'justify-center' : ' justify-between'} w-full items-center mx-auto  h-fit`}>
             <p className='text-center'>Score : {score}</p>
             {!didGameStart &&
             <div className='flex items-center gap-1'>
-                <p>Grid Size: </p>
-                <input className='inputStyle w-12' onChange={(e:any)=>{setGridSize(e.target.value)}} value={gridSize} placeholder='grid size' type='number' min={10} max={30}/>
+                <div className='flex items-center gap-1'>
+                    <p>Size</p>
+                    <input className='inputStyle w-12' onChange={(e:any)=>{setGridSize(Math.max(10,Math.min(30,e.target.value)))}} value={gridSize} placeholder='grid size' type='number' min={10} max={30}/>
+                </div>
+                <div className='flex items-center gap-1'>
+                    <p>Lines</p>
+                    <input checked={showGridLines} onChange={(e:any)=>setShowGridLines(e.target.checked)} type='checkbox'/>
+                </div>
             </div>
             }
         </section>
 
+
+
+        <div className='relative h-full w-full flex flex-col justify-center overflow-hidden'>
         <section className='flex w-full items-center justify-evenly text-lg h-fit'>
             <div className='flex items-center gap-1 text-orange-500' dir='rtl'><section className='w-3 aspect-square bg-orange-500'></section>{firstWord?.translate}</div>
             <p>{correctWord===0 ? firstWord?.word : secondWord?.word}</p>
             <div className='flex items-center gap-1 text-violet-600' dir='rtl'><section className='w-3 aspect-square bg-violet-600'></section>{secondWord?.translate}</div>
         </section>
-
         <ul style={{
             gridTemplateRows: `repeat(${gridSize}, 1fr)`,
             gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
-            }} 
-            className={`relative grid gap-1 overflow-hidden w-full aspect-square bg-gray-400/20`}>
+        }} 
+        className={`relative grid gap-1 overflow-hidden w-full aspect-square bg-gray-400/20`}>
             {boardMapped}
 
             {!didGameStart && 
-            <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md animate-pulse '>
-                <p>Press W,A,S,D or Arrow keys to start</p>
-            </div>
+            <li className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md animate-pulse '>
+                <div className='flex items-center gap-1 lg:hidden'> <BiMove/> <p>Drag Screen</p> </div>
+                <div className=' items-center gap-1 hidden lg:flex'><FaRegKeyboard/> <p>W,A,S,D or Arrows</p></div>
+            </li>
             }
             {didLose && !didWin &&
-                <div className='flex flex-col text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md'>
-                <p>You Lost, Score : {score}</p>
-                <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
-            </div>
+                <li className='flex flex-col text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md'>
+                    <p>You Lost, Score : {score}</p>
+                    <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
+                </li>
             }
-            <PlayerMovement didLose={didLose}  currentDirection={direction} playerLength={score+1} updateDirection={updateDirectionHandler}/>
+            <li>
+                <PlayerMovement didLose={didLose}  currentDirection={direction} playerLength={score+1} updateDirection={updateDirectionHandler}/>
+            </li>
+
             {didLose && didWin &&
-                <div className='flex flex-col text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md'>
+                <li className='flex flex-col text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md'>
                     <p>You WON !, Score : X</p>
                     <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
-                </div>
+                </li>
             }
         </ul>
+        </div>
 
 
 

@@ -118,17 +118,9 @@ const PlayerMovement:React.FC<{updateDirection:(direction:number)=>void,currentD
 
 
 return (
-    <div ref={boardRef} className={`absolute w-full h-full  ${didLose && '-z-10'}`}>
+    <div ref={boardRef} className={`absolute w-full h-full  touch-none ${didLose && '-z-10'}`}>
 
     </div>
-//     <ul className='flex flex-col w-36 max-w-full  h-fit gap-2  mx-auto relative items-center'>
-//         <li onClick={()=>{updateDirectionHandler(1)}} className='text-center inputStyle cursor-pointer w-12 aspect-square'><AiOutlineArrowUp className='w-full h-full'/></li>
-//         <ul className='flex w-full items-center justify-between'>
-//             <li onClick={()=>{updateDirectionHandler(4)}} className=' inputStyle py-3 cursor-pointer w-12 aspect-square'><AiOutlineArrowUp className='w-full h-full rotate-[270deg]'/></li>
-//             <li onClick={()=>{updateDirectionHandler(2)}} className=' inputStyle py-3 cursor-pointer w-12 aspect-square'><AiOutlineArrowUp className='w-full h-full rotate-90'/></li>
-//         </ul>
-//         <li onClick={()=>{updateDirectionHandler(3)}} className='text-center inputStyle cursor-pointer w-12 aspect-square'><AiOutlineArrowUp className='w-full h-full rotate-180'/></li>
-// </ul>
 )
 }
 
