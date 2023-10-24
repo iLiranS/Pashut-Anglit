@@ -35,12 +35,15 @@ export async function POST(request:Request) {
         
         const res = await request.json();
         const words = res as Word[];
-        console.table(words);
+        if (!words || words.length<1) throw new Error('no words given to approve');
 
         const wordsObj =await prisma.word.createMany({
             data:words
         })
         if (!wordsObj) throw new Error('something went wrong');
+        // remove from suggested
+        const removedWords = await prisma.suggestedWord.deleteMany({})
+        if (!removedWords) throw new Error('could not delete suggested');
         return NextResponse.json('successfully added words');
     }
     catch(err:any){

@@ -6,7 +6,9 @@ import { localWord } from '@/utils/tsModels';
 import { toast } from 'react-toastify';
 
 
-
+let nextDirection:number|null = null;
+// can improve if added changing the near head positions to 1 as well so fruit cannot be spawned near hear.
+// but it takes some calculations to not update out of board.
 const MainSnake = () => {
     const [gridSize,setGridSize] = useState(15);
     const [snake,setSnake] = useState([[Math.floor(gridSize/2),Math.floor(gridSize/2)]]);
@@ -25,23 +27,6 @@ const MainSnake = () => {
     const [correctWord,setCorrectWord] = useState(0); // 0= first , 1= second
 
 
-    // generate fruit position on empty space.
-    const generateNewFruitPosition = useCallback(() =>{
-        const availableSpots:number[][] = [];
-        for (let i =0 ; i<gridSize;i++){
-            //row
-            for (let j =0; j<gridSize;j++){
-                //col
-                if(board[i][j]===0) availableSpots.push([i,j]);
-            }
-        }
-        if (availableSpots.length <=1) return false; // no spots
-        const rndIndex = Math.floor(Math.random() * availableSpots.length);
-        const randomFruitPos = availableSpots[rndIndex];
-        return randomFruitPos
-    },[gridSize,board])
-
-
     const boardMapped = useMemo(()=>{
         const mappedInside = [];
         let counter = 0;
@@ -54,21 +39,18 @@ const MainSnake = () => {
                 const isFruitInSpot = fruitPos?.toString() === currentSpot.toString() 
                 const isfruitCopyInSpot = fruitPosCopy?.toString()===currentSpot.toString();
                 const isFirst = snake[0][0] === currentSpot[0] && snake[0][1] === currentSpot[1];
-                mappedInside.push(<li className={`grid place-items-center w-full aspect-square ${isFirst && 'bg-black'} ${doesPlayerInSpot && !isFruitInSpot &&!isfruitCopyInSpot && !isFirst && 'bg-green-400'} ${isFruitInSpot && 'bg-orange-500'} ${ isfruitCopyInSpot && 'bg-violet-600'} ${!isFruitInSpot && !isfruitCopyInSpot && !doesPlayerInSpot && 'bg-gray-400'}`} key={counter.toString()}></li>)
+                mappedInside.push(<li className={`grid rounded-sm place-items-center w-full aspect-square ${isFirst && 'bg-black'} ${doesPlayerInSpot && !isFruitInSpot &&!isfruitCopyInSpot && !isFirst && 'bg-green-400'} ${isFruitInSpot && 'bg-orange-500'} ${ isfruitCopyInSpot && 'bg-violet-600'} ${!isFruitInSpot && !isfruitCopyInSpot && !doesPlayerInSpot && 'bg-gray-400'}`} key={counter.toString()}></li>)
                 counter++;
             }
         }
         return mappedInside;
     },[snake,fruitPos,fruitPosCopy,gridSize])
 
-
-
     const updateGame = () =>{
-        if (!didGameStart || didLose) return;
-        console.log(direction)
+        if (!didGameStart || didLose || !direction) return;
         let newSnake =[...snake];
 
-        switch(direction){
+        switch(nextDirection){
             case 1:
                 newSnake.unshift([newSnake[0][0]-1,newSnake[0][1]])
                 break;
@@ -117,11 +99,23 @@ const MainSnake = () => {
             newSnake.pop();
         }
         setSnake(newSnake);
+        nextDirection = direction;
+
+        setBoard(()=>{
+            const fornow = [...initialArray];
+            newSnake.forEach(spot => {
+                if(spot[0]>0 && spot[0]<initialArray.length-1 && spot[1]>0 && spot[1]<initialArray.length-1) fornow[spot[0]][spot[1]]=1
+            });
+            return fornow;
+        })
     }
 
+    // either sets direction or changes nextDirection, it will be updated after 1 snake movement in updateGame func
     const updateDirectionHandler = (direction:number) =>{
         setDidGameStart(true);
+        if(!nextDirection) nextDirection = direction;
         setDirection(direction);
+        
     }
 
 
@@ -132,12 +126,13 @@ const MainSnake = () => {
         setDidGameStart(false);
         setDidLose(false);
         setDirection(null);
+        nextDirection = null;
         setFruitPos(null);
 
     };
 
 
-
+// strats the game
     useEffect(()=>{
         const interval = setInterval(updateGame,1000/fps);
         return()=>clearInterval(interval);
@@ -158,61 +153,80 @@ const MainSnake = () => {
     },[snake,gridSize])
 
 
-    //update board empty spots based on playerPos array
-    useEffect(()=>{
-        // if everything is valid, update available spots
-        setBoard(()=>{
-            const fornow = [...initialArray];
-            snake.forEach(spot => {
-                if(spot[0]>0 && spot[0]<gridSize-1 && spot[1]>0 && spot[1]<gridSize-1) fornow[spot[0]][spot[1]]=1
-            });
-            return initialArray;
-        })
-    },[snake,initialArray,gridSize])
+    // returns  position on empty space on board (where snake is not there).
+    const generateNewFruitPosition = useCallback(() =>{
+        const availableSpots:number[][] = [];
+        for (let i =0 ; i<board.length;i++){
+            //row
+            for (let j =0; j<board.length;j++){
+                //col
+                if(board[i][j]===0) availableSpots.push([i,j]);
+            }
+        }
+        if (availableSpots.length <=6) return false; // only 4 spots left, conside as a win
+        const rndIndex = Math.floor(Math.random() * availableSpots.length);
+        const randomFruitPos = availableSpots[rndIndex];
+        return randomFruitPos
+    },[board])
+    
 
-    useEffect(()=>{
-        const compareVal:number = Math.floor(score/4.5 +7);
-        let newFps = Math.min(30,compareVal)
-        setFps(newFps);
-
-    },[score])
-
-
-    // generating fruits
-    useEffect(()=>{
+// set fruits to 2 different locations 
+    const generateFruits = useCallback(()=>{
         if (fruitPos) return;
         const truePos = generateNewFruitPosition();
         if (!truePos) {setDidLose(true); setDidWin(true)}
-        const falsePos = generateNewFruitPosition();
+        let falsePos = generateNewFruitPosition();
+        while (falsePos.toString() === truePos.toString()){
+            falsePos = generateNewFruitPosition();
+        }
         setFruitPos(truePos as number[]);
         setfruitPosCopy(falsePos as number[]);
+    },[generateNewFruitPosition,fruitPos])
 
 
-    },[fruitPosCopy,fruitPos,generateNewFruitPosition])
-
-    // generate words
+    // upon grid change remove fruits
     useEffect(()=>{
-        
-        const getRandomWords =async () => {
-            const words = await db.words.toArray();
-            if (!words || words.length<2) {toast.error('אין מספיק מילים,היכנס ללימוד מילים קודם כדי להמשיך')};
-            const rnd1 = Math.floor(Math.random()*words.length);
-            let rnd2 = Math.floor(Math.random()*words.length);
-            while (rnd2===rnd1){
-                rnd2 = Math.floor(Math.random()*words.length);
-            }
-            setFirstWord(words[rnd1]);
-            setSecondWord(words[rnd2]);
-        }
-        getRandomWords();
-        setCorrectWord(Math.floor(Math.random()*2));
-        
+        setFruitPos(null);
+        setBoard(initialArray);
+    },[gridSize,initialArray])
+
+// returns new fps by score
+    const getNewFps = useCallback(()=>{
+        const compareVal:number = Math.floor(score/5 +7);
+        let newFps = Math.min(25,compareVal)
+        return newFps
     },[score])
+
+    // updates random words, getting words from dexie db (indexedDB)
+    const updateRandomWords = useCallback(async()=>{
+        const words = await db.words.toArray();
+        if (!words || words.length<2) {toast.error('אין מספיק מילים,היכנס ללימוד מילים קודם כדי להמשיך')};
+        const rnd1 = Math.floor(Math.random()*words.length);
+        let rnd2 = Math.floor(Math.random()*words.length);
+        while (rnd2===rnd1){
+            rnd2 = Math.floor(Math.random()*words.length);
+        }
+        setFirstWord(words[rnd1]);
+        setSecondWord(words[rnd2]);
+        setCorrectWord(Math.floor(Math.random()*2));
+    },[])
+
+    // generate fruit when its gone.
+    useEffect(()=>{
+        generateFruits();
+    },[generateFruits])
+
+    // generate words and updates fps, called when score changes.
+    useEffect(()=>{
+        setFps(getNewFps());
+        updateRandomWords();
+    },[updateRandomWords,getNewFps])
 
 
   return (
-    <div className=' h-full w-full gap-1  relative mx-auto pt-8 flex flex-col'>
-        <section className={`flex ${didGameStart ? 'justify-center' : ' justify-evenly'} items-center  h-fit`}>
+    <div className=' h-[100dvh] w-screen gap-1 max-w-[500px] mx-auto  relative pt-3 select-none overflow-hidden grid grid-rows[max-content,max-content,1fr] pb-2 px-1'>
+
+        <section className={`flex ${didGameStart ? 'justify-center' : ' justify-evenly'} w-full items-center mx-auto  h-fit`}>
             <p className='text-center'>Score : {score}</p>
             {!didGameStart &&
             <div className='flex items-center gap-1'>
@@ -221,16 +235,18 @@ const MainSnake = () => {
             </div>
             }
         </section>
-        <section className='flex items-center justify-evenly text-lg  h-fit'>
+
+        <section className='flex w-full items-center justify-evenly text-lg h-fit'>
             <div className='flex items-center gap-1 text-orange-500' dir='rtl'><section className='w-3 aspect-square bg-orange-500'></section>{firstWord?.translate}</div>
             <p>{correctWord===0 ? firstWord?.word : secondWord?.word}</p>
             <div className='flex items-center gap-1 text-violet-600' dir='rtl'><section className='w-3 aspect-square bg-violet-600'></section>{secondWord?.translate}</div>
         </section>
+
         <ul style={{
             gridTemplateRows: `repeat(${gridSize}, 1fr)`,
             gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
             }} 
-            className={`relative grid gap-1 overflow-hidden w-[360px] md:w-[500px] max-w-[95vw] mx-auto aspect-square bg-gray-400/20`}>
+            className={`relative grid gap-1 overflow-hidden w-full aspect-square bg-gray-400/20`}>
             {boardMapped}
 
             {!didGameStart && 
@@ -244,16 +260,15 @@ const MainSnake = () => {
                 <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
             </div>
             }
+            <PlayerMovement didLose={didLose}  currentDirection={direction} playerLength={score+1} updateDirection={updateDirectionHandler}/>
             {didLose && didWin &&
                 <div className='flex flex-col text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg dark:bg-bgDark p-4 rounded-md'>
-                <p>You WON !, Score : X</p>
-                <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
-            </div>
+                    <p>You WON !, Score : X</p>
+                    <p className='text-orange-500 cursor-pointer' onClick={restartGameHandler}>Press to restart</p>
+                </div>
             }
-
         </ul>
 
-        <PlayerMovement key={score} currentDirection={direction} playerLength={score+1} updateDirection={updateDirectionHandler}/>
 
 
 

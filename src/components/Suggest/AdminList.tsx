@@ -94,29 +94,29 @@ const AdminList = () => {
     },[removeSuggestedWord,isLoading])
 
 
-    const removeAllHandler = useCallback(async() =>{
-      if (isLoading) return;
-      setIsLoading(true);
-        // delete all words from suggested
-        try{
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/words`,{method:'DELETE'});
-          if (!res.ok){
-            throw new Error();
-          }
-          // word deleted, remove from state and toast.
-          notifySuccess(`Words Removed from Suggested Successfully!`)
-          setSuggestedWords([]);
+    // const removeAllHandler = useCallback(async() =>{
+    //   if (isLoading) return;
+    //   setIsLoading(true);
+    //     // delete all words from suggested
+    //     try{
+    //       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/words`,{method:'DELETE'});
+    //       if (!res.ok){
+    //         throw new Error();
+    //       }
+    //       // word deleted, remove from state and toast.
+    //       notifySuccess(`Words Removed from Suggested Successfully!`)
+    //       setSuggestedWords([]);
           
-        }
-        catch(err:any){
-          notifyError(err.message ??'error');
-        }
-        setIsLoading(false);
-    },[isLoading])
+    //     }
+    //     catch(err:any){
+    //       notifyError(err.message ??'error');
+    //     }
+    //     setIsLoading(false);
+    // },[isLoading])
 
 
     const approveAllHandler = useCallback(async() =>{
-      if (isLoading) return;
+      if (isLoading || moreToFetch) return;
       setIsLoading(true);
       const mappedSuggestedToAdd = suggestedWords.map(word => ({word:word.word,translate:word.translate,level:word.wordLevel}));
       // delete word and add to word list
@@ -130,13 +130,13 @@ const AdminList = () => {
         if (!res.ok) throw new Error();
         // success
         notifySuccess(`Words Added to db Successfully`);
-        // remove word from suggested.
-        removeAllHandler();
+        // remove word from suggested. Changed : Now happens automatically in words suggested route.
+        // removeAllHandler();
       }
       catch(err:any){
         notifyError(err.message ?? 'error');
       }
-    },[isLoading,suggestedWords,removeAllHandler])
+    },[isLoading,suggestedWords])
 
 
     const suggestedMapped = useMemo(()=>{
@@ -177,7 +177,7 @@ const AdminList = () => {
       </table>
 
       <section className='flex items-center justify-center gap-2'>
-        <p onClick={approveAllHandler} className='inputStyle cursor-pointer w-fit mx-auto p-2'>Approve all</p>
+        <p onClick={approveAllHandler} className={`${moreToFetch ? 'cursor-not-allowed opacity-60' :'cursor-pointer'} inputStyle  w-fit mx-auto p-2`}>Approve all</p>
 
         {moreToFetch && isLoading && <section className='animate-spin'><AiOutlineLoading3Quarters/> </section>}
         {moreToFetch && !isLoading &&  <p className='inputStyle cursor-pointer w-fit mx-auto' onClick={fetchSuggestedWords}>Load more</p>}
