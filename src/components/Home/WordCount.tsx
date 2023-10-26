@@ -13,7 +13,7 @@ const WordCount = async() => {
     const wordCount = await getWordsCount();
 
 return (
-    <p>Currently there are <span className='text-violet-400'>{wordCount || '...'}</span> words.</p>
+    <p className='opacity-90'>Currently there are <span className='text-violet-500 opacity-100'>{wordCount || '...'}</span> words.</p>
 )
 }
 

@@ -1,183 +1,69 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import WordCount from "@/src/components/Home/WordCount"
-import Link from "next/link"
 import { Suspense } from "react"
-
+import WordCount from "@/src/components/Home/WordCount"
+import UserName from "@/src/components/User/UserName"
+import Link from "next/link"
+import {LuSwords} from 'react-icons/lu'
+import {MdOutlineGames} from 'react-icons/md'
+import { HiOutlineBookOpen } from "react-icons/hi"
+import { LiaLanguageSolid } from "react-icons/lia"
+import StudyIllustration from "@/src/components/Home/Illustration"
 
 
 
 export default  function Home() {
+  return(
+    <div className="min-h-[100dvh] overflow-x-hidden w-screen relative py-2 px-2 md:py-8 md:px-4 flex flex-col gap-4">
 
-  return (
+      <section className="grid grid-cols-1 lg:grid-cols-[max-content,1fr] w-full justify-between">
+          <div className="hidden lg:block w-full">
+            {/* img in here */}
+            <StudyIllustration className='scale-50  lg:scale-75'/>
+          </div>
 
-<div className='relative  pt-8 grid place-items-center gap-4'>
-<li dir="rtl" className="flex items-center gap-1 justify-center text-xs"><p className="text-green-400 underline underline-offset-2">חדש</p> <p className="opacity-100">דו קרב עכשיו זמין</p></li>
+          <div className="flex flex-col w-full ">
+              <div className="flex items-center gap-1 w-full justify-end"> <UserName/> <p>,שלום</p> </div>
+            <section className="w-fit relative self-end flex flex-col gap-3 pt-8">
+              <h2 className="text-4xl font-bold  text-end">ללמוד אנגלית בדרך <span className="text-violet-500">מהנה</span></h2>
+              <p dir="rtl" className="text-base opacity-80 font-bold">הרחב את אוצר המילים באמצעות משחקים ודרכים שונים</p>
+              <p dir="rtl" className="text-base opacity-80 font-bold">תענה נכון על מנת לעלות רמות ולהיתקל במילים אפילו קשות יותר!</p>
+              <p dir="rtl" className="text-base font-bold">איך זה עובד?</p>
+              <ul dir="rtl" className="flex flex-col list-disc list-inside">
+                <li>נרשמים לאתר ומתחילים מהרמה הראשונה</li>
+                <li>מתחילים לענות נכון במערכת הלימוד</li>
+                <li>עולים רמות ונפתחות רמות חדשות וקשות יותר של מילים</li>
+              </ul>
+            </section>
+          </div>
+      </section>
 
-<Accordion type="single" collapsible className="w-[500px] max-w-[95vw] ">
-
-<AccordionItem  value="item-1">
-        <AccordionTrigger><p>Update 1.0.6 <span className='text-sm  text-violet-500'>(current)</span> <span className='text-[0.65em] opacity-75'>20/10/2023</span></p></AccordionTrigger>
-        <AccordionContent>
-          <ul className=' list-disc list-inside gap-1 flex flex-col'>
-            <h3 className='text-violet-500'>Snake Game 🐍 </h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Brand new game, A sanke game with a twist.</li>
-              <li>still not 100% done but pretty challenging.</li>
-            </ul>
-          
-            <h3 className='text-violet-500'>Main Study & Duel</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Smoother animations</li>
-            </ul>
-          
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem  value="item-2">
-        <AccordionTrigger><p>Update 1.0.5  <span className='text-[0.65em] opacity-75'>18/10/2023</span></p></AccordionTrigger>
-        <AccordionContent>
-          <ul className=' list-disc list-inside gap-1 flex flex-col'>
-            <h3 className='text-violet-500'>Duel Game</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>leave detection before starting a match will now delete room instance.</li>
-              <li>some code improvement</li>
-            </ul>
-
-            <h3 className='text-violet-500'>Main Study</h3>
-            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
-              <li>there is now an indicator that explains the learning system.</li>
-              <li>friendlier UI and animations - bigger text and answer animation changed.</li>
-            </ul>
-
-            
-            <h3 className='text-violet-500'>SideBar</h3>
-            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
-              <li>bigger text and added icons for each option.</li>
-            </ul>
-
-          
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem  value="item-3">
-        <AccordionTrigger><p>Update 1.0.4  <span className='text-[0.65em] opacity-75'>17/10/2023</span></p></AccordionTrigger>
-        <AccordionContent>
-          <ul className=' list-disc list-inside gap-1 flex flex-col'>
-            <h3 className='text-violet-500'>Duel Game</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Duel game first version is out</li>
-              <li>You can enter a match against a random person to compete in a quiz game with words and translates.</li>
-              <li>there mightt be alot of bugs 🐞 which I will work to solve later on.</li>
-              <li>In addition, each user has duel score which depends on match results.</li>
-            </ul>
-
-            <h3 className='text-violet-500'>Main Study</h3>
-            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
-              <li>made the level color visibility, it was hard to see in light mode.</li>
-            </ul>
-
-            
-            <h3 className='text-violet-500'>Suggest</h3>
-            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
-              <li>admin panel approve list improvement ui</li>
-            </ul>
-
-          
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-
-
-
-      <AccordionItem  value="item-4">
-        <AccordionTrigger><p>Update 1.0.3  <span className='text-[0.65em] opacity-75'>13/10/2023</span></p></AccordionTrigger>
-        <AccordionContent>
-          <ul className=' list-disc list-inside gap-1 flex flex-col'>
-            <h3 className='text-violet-500'>Dictionary</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Fixed to not care about lower/upper case of search value</li>
-            </ul>
-            <h3 className='text-violet-500'>Main Study</h3>
-            <ul className='pl-2 list-disc list-inside gap-2 flex flex-col'>
-              <li>
-                Changed how the main study works :
-                <p className='my-2'>Now you have to answer a certain word 3 times correctly in order to {`"learn"`} this word.</p>
-                <p>only words which the user answered correctly 3 times will be added to dictionary and might show up again only upon old words revisits.</p>
-              </li>
-              <li>System of which words that have been displayed in the last 10 {`"rounds"`}  wont be able to show again until at least 10 {`"rounds"`} have been passed.</li>
-              <li>bug fix of edge case that caused the possibility of the same transalte to show twice.</li>
-            </ul>
-
-          
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="item-5">
-        <AccordionTrigger ><p>Update 1.0.2 <span className='text-[0.65em] opacity-75'>10/10/2023</span></p></AccordionTrigger>
-        <AccordionContent>
-          <ul className=' list-disc list-inside gap-1 flex flex-col'>
-            <h3 className='text-violet-500'>Suggest System</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Admin Panel better UI and option to approve all words suggested at once.</li>
-            </ul>
-            <h3 className='text-violet-500'>Landing Page</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Replaced landing page to display updates and previous updates.</li>
-            </ul>
-            <h3 className='text-violet-500'>SideBar</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Fixed user points to be fixed one number after the dot.</li>
-            </ul>
-            <h3 className='text-violet-500'>Main Study</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Slight animation change to word placeholder.</li>
-            </ul>
-
-          
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="item-6">
-        <AccordionTrigger><p> Update 1.0.1 <span className='text-[0.65em] opacity-75'>3/10/2023</span></p></AccordionTrigger>
-        <AccordionContent>
-          <ul className=' list-disc list-inside gap-1 flex flex-col'>
-            <h3 className='text-violet-500'>Dictionary</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Dictionary UX fixes.</li>
-            </ul>
-            <h3 className='text-violet-500'>Main Study</h3>
-            <ul className='pl-2 list-disc list-inside'>
-              <li>Balanced points after answering correctly.</li>
-              <li>Added more randomness to word levels.</li>
-              <li>Mobile hover stays upon answering fix.</li>
-              <li>Added to study random words that the user answered in the past (only old words)</li>
-            </ul>
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-
-    <section className="flex flex-col text-center">
-      <Suspense fallback={<p>Currently there are <span className='text-violet-400 animate-pulse'>._.</span> words.</p>}>
-        <WordCount/>
-      </Suspense>
-    <p className='opacity-75 text-sm text-center'>הערה: נתוני המילים שנלמדו לא מאוחסנים בענן לכן תלויים במכשיר</p>
-    <p className='opacity-75 text-sm text-center'>לכן מומלץ להשתמש באותו המכשיר למשך הלמידה עד שתהיה אפשרות לשיתוף</p>
-    <Link className="text-orange-400 hover:underline text-sm" href={'/study'}>לחץ כדי להתחיל ללמוד</Link>
-    </section>
-
-
-
+    <div className="flex flex-col gap-1 w-full md:w-fit mx-auto">
+      <h2 dir="rtl" className="text-base opacity-80 font-bold md:pr-1">חלק ממה שהאתר מציע:</h2>
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(192px,max-content))] md:grid-cols-4  gap-4 w-full justify-center">
+        <SingleGrid icon={<HiOutlineBookOpen/>} name="מילון" desc="צפה במילים שכבר למדת" link="/dictionary"/>
+        <SingleGrid icon={<MdOutlineGames/>} name="סנייק" desc="המשחק הידוע אבל עם טוויסט" link="/snake"/>
+        <SingleGrid icon={<LuSwords/>} name="דו קרב" desc="חידון מילים באנגלית" link="/duel"/>
+        <SingleGrid icon={<LiaLanguageSolid/>} name="מערכת לימוד" desc="למד מילים חדשות על פי רמתך" link="/study"/>
+      </div>
+    </div>
+    
+    <div className="text-center md:absolute md:bottom-4 md:left-1/2 md:-translate-x-1/2">
+    <Suspense fallback={<p className="opacity-90">Currently there are <span className='text-violet-400 animate-pulse'>...</span> words.</p>}>
+      <WordCount/>
+    </Suspense>
+    </div>
 
     </div>
   )
 }
+
+const SingleGrid:React.FC<{name:string,desc:string,link:string,icon:React.ReactNode}> = ({name,desc,link,icon}) =>{
+
+  return(
+    <Link  href={link} className="flex flex-col gap-1 inputStyle p-2 w-48">
+      <section className="justify-between flex items-center"> {icon} <p>{name}</p></section>
+      <p dir="rtl" className="opacity-80 text-sm truncate">{desc}</p>
+    </Link>
+  )
+}
+
+ 

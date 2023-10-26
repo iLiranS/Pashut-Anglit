@@ -7,7 +7,7 @@ import {HiOutlineBookOpen} from 'react-icons/hi'
 import {BsLightbulb} from 'react-icons/bs'
 import {LuSwords} from 'react-icons/lu'
 import {LiaLanguageSolid} from 'react-icons/lia'
-import {MdOutlineGames} from 'react-icons/md'
+import {MdOutlineGames,MdUpdate} from 'react-icons/md'
 import useThemeStore from '@/store/useThemeStore'
 import useUserStore from "@/store/useUserStore";
 import ExpProgress from "./ExpProgress";
@@ -136,6 +136,10 @@ const Sidebar:React.FC<{isOpen:boolean,logOut:()=>void,closeSideBar:()=>void}> =
 
                             <AccordionContent onClick={closeSideBarHandler} className="pr-2">
                                 <Link className="hover:underline flex items-center gap-1" href={'/dictionary'}><HiOutlineBookOpen/>מילון</Link>
+                            </AccordionContent>
+
+                            <AccordionContent onClick={closeSideBarHandler} className="pr-2">
+                                <Link className="hover:underline flex items-center gap-1" href={'/changelog'}><MdUpdate/>changelog</Link>
                             </AccordionContent>
 
                     </AccordionItem>
