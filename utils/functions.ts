@@ -56,7 +56,8 @@ export const updatedUserStats = (level:userLevel,exp:number,currentExp:number):{
 export const getLevelsArrayFromLevel = (level:userLevel) =>{
     let levels:wordLevel[] =['easy'];
     switch(level){
-        case 'Rookie':
+        case 'Expert':
+            levels=['hard','impossible']
             break;
         case 'Novice':
             levels=['easy','medium'];
